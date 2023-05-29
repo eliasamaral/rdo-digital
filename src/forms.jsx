@@ -111,7 +111,7 @@ const Forms = () => {
       body: [
         { funcao: "Encarregado", quantidade: `${encarregadoQuantidade}` },
         { funcao: "Motorista", quantidade: `${motoristaQuantidade}` },
-        { funcao: "Eletrecista", quantidade: `${eletricistaQuantidade}` },
+        { funcao: "Eletricista", quantidade: `${eletricistaQuantidade}` },
         { funcao: "Auxiliar", quantidade: `${auxiliarQuantidade}` },
       ],
       showHead: "firstPage",
@@ -172,7 +172,7 @@ const Forms = () => {
 
   return (
     <>
-      <Title level={4}>Formulario</Title>
+      <Title level={4}>Formulário</Title>
       <Space>
         <Input
           type="number"
@@ -194,7 +194,7 @@ const Forms = () => {
 
       <Space>
         <Input
-          addonBefore="Manha"
+          addonBefore="Manhã"
           placeholder="Clima"
           name="climaManha"
           value={climaManha}
@@ -228,7 +228,7 @@ const Forms = () => {
         />
         <Input
           type="number"
-          placeholder="Eletrecista"
+          placeholder="Eletricista"
           name="eletricistaQuantidade"
           value={eletricistaQuantidade}
           onChange={(e) => handleInputChange(e)}
@@ -245,7 +245,7 @@ const Forms = () => {
       <Divider orientation="left">Observações</Divider>
 
       <TextArea
-        placeholder="Observaçoes"
+        placeholder="Observações"
         rows={4}
         name="observacoes"
         onChange={(e) => handleInputChange(e)}
