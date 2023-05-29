@@ -157,7 +157,7 @@ const Forms = () => {
     var finalY = doc.lastAutoTable.finalY || 10;
     autoTable(doc, {
       startY: finalY + 20,
-      columns: [{ header: "Observaçoes", dataKey: "observaçoes" }],
+      columns: [{ header: "Observações", dataKey: "observaçoes" }],
       body: [{ observaçoes: `${observacoes}` }],
       showHead: "firstPage",
       styles: { overflow: "hidden" },

@@ -1,4 +1,217 @@
 export const obras = [
+  // {
+  //   projeto: 4001315442,
+  //   diagrama: 400212159,
+  //   local: "Santa Luzia",
+  //   srv:[]
+  // },
+
+  {
+    projeto: 4001315442,
+    diagrama: 400212159,
+    local: "Santa Luzia",
+    srv: [
+      {
+        codigo: 71010037,
+        descricao: "13.2 - CONCRETAR BASE",
+      },
+      {
+        codigo: 71010045,
+        descricao: "13.6 - ESTAI DE ÂNCORA",
+      },
+      {
+        codigo: 71010055,
+        descricao: "16.1 - ALUGUÉL DE TRATOR",
+      },
+      {
+        codigo: 71010170,
+        descricao: "8.1 - I - ESTRUTURA PRIMÁRIA - MONO",
+      },
+      {
+        codigo: 71010180,
+        descricao: "8.3.2-I-ESTR PRIMARIA-REDE COMPAC-TIPO2",
+      },
+      {
+        codigo: 71010195,
+        descricao: "8.6 - I - ESTRUTURA SECUNDÁRIA",
+      },
+      {
+        codigo: 71011486,
+        descricao: "8.2.3-I-ESTR PRIMARIA-BIF/TRIF-TIPO3",
+      },
+      {
+        codigo: 71011487,
+        descricao: "8.2.1 - I - ESTR PRIM - BIF/TRIF -TIPO 1",
+      },
+      {
+        codigo: 71011488,
+        descricao: "8.2.2-I-ESTR PRIMARIA-BIF/TRIF-TIPO2",
+      },
+      {
+        codigo: 71011489,
+        descricao: "8.2.4-I-ESTR PRIMARIA-BIF/TRIF-TIPO4",
+      },
+      {
+        codigo: 71016214,
+        descricao: "SERV I-POSTE&lt;2500KG C/TRAN",
+      },
+      {
+        codigo: 71011592,
+        descricao: "8.3.1-I-ESTR PRIM-REDE COMPAC-TIPO1",
+      },
+      {
+        codigo: 71011594,
+        descricao: "8.3.4-I-ESTR PRIM-REDE COMPAC-TIPO4",
+      },
+      {
+        codigo: 71012164,
+        descricao: "I - ATUALIZAÇÃO DA BASE CADASTRAL AS BUI",
+      },
+      {
+        codigo: 71010070,
+        descricao: "16.5 - DESLOCAMENTO FORA ÁREA EMPREITADA",
+      },
+      {
+        codigo: 71010106,
+        descricao: "4.2 - I - CONDUTOR REDE COMPACTA",
+      },
+      {
+        codigo: 71011550,
+        descricao: "4.1.1 - I -COND. REDE CONV. ATÉ 1/0 AWG",
+      },
+      {
+        codigo: 71011593,
+        descricao: "8.3.3-I-ESTR PRIM-REDE COMPAC-TIPO3",
+      },
+      {
+        codigo: 71011549,
+        descricao: "4.1.1 - D -COND. REDE CONV. ATÉ 1/0 AWG",
+      },
+      {
+        codigo: 71012165,
+        descricao: "D - ATUALIZAÇÃO DA BASE CADASTRAL AS BUI",
+      },
+      {
+        codigo: 71010040,
+        descricao: "13.5 - D - ESTAI",
+      },
+      {
+        codigo: 71010169,
+        descricao: "8.1 - D - ESTRUTURA PRIMÁRIA - MONO",
+      },
+      {
+        codigo: 71010194,
+        descricao: "8.6 - D - ESTRUTURA SECUNDÁRIA",
+      },
+      {
+        codigo: 71016210,
+        descricao: "SERV D-POSTE&lt;2500KG C/TRAN",
+      },
+    ],
+  },
+  {
+    projeto: 4001315431,
+    diagrama: 400212220,
+    local: "Santa Luzia",
+    srv: [
+      {
+        codigo: 71010037,
+        descricao: "13.2 - CONCRETAR BASE",
+      },
+      {
+        codigo: 71010045,
+        descricao: "13.6 - ESTAI DE ÂNCORA",
+      },
+      {
+        codigo: 71010055,
+        descricao: "16.1 - ALUGUÉL DE TRATOR",
+      },
+      {
+        codigo: 71010170,
+        descricao: "8.1 - I - ESTRUTURA PRIMÁRIA - MONO",
+      },
+      {
+        codigo: 71010180,
+        descricao: "8.3.2-I-ESTR PRIMARIA-REDE COMPAC-TIPO2",
+      },
+      {
+        codigo: 71010195,
+        descricao: "8.6 - I - ESTRUTURA SECUNDÁRIA",
+      },
+      {
+        codigo: 71011486,
+        descricao: "8.2.3-I-ESTR PRIMARIA-BIF/TRIF-TIPO3",
+      },
+      {
+        codigo: 71011489,
+        descricao: "8.2.4-I-ESTR PRIMARIA-BIF/TRIF-TIPO4",
+      },
+      {
+        codigo: 71016214,
+        descricao: "SERV I-POSTE&lt;2500KG C/TRAN",
+      },
+      {
+        codigo: 71016223,
+        descricao: "SERV I-POSTE&gt;=2500KG C/TRAN",
+      },
+      {
+        codigo: 71011592,
+        descricao: "8.3.1-I-ESTR PRIM-REDE COMPAC-TIPO1",
+      },
+      {
+        codigo: 71011593,
+        descricao: "8.3.3-I-ESTR PRIM-REDE COMPAC-TIPO3",
+      },
+      {
+        codigo: 71011594,
+        descricao: "8.3.4-I-ESTR PRIM-REDE COMPAC-TIPO4",
+      },
+      {
+        codigo: 71012164,
+        descricao: "I - ATUALIZAÇÃO DA BASE CADASTRAL AS BUI",
+      },
+      {
+        codigo: 71010070,
+        descricao: "16.5 - DESLOCAMENTO FORA ÁREA EMPREITADA",
+      },
+      {
+        codigo: 71010106,
+        descricao: "4.2 - I - CONDUTOR REDE COMPACTA",
+      },
+      {
+        codigo: 71011550,
+        descricao: "4.1.1 - I -COND. REDE CONV. ATÉ 1/0 AWG",
+      },
+      {
+        codigo: 71010040,
+        descricao: "13.5 - D - ESTAI",
+      },
+      {
+        codigo: 71010169,
+        descricao: "8.1 - D - ESTRUTURA PRIMÁRIA - MONO",
+      },
+      {
+        codigo: 71016210,
+        descricao: "SERV D-POSTE&lt;2500KG C/TRAN",
+      },
+      {
+        codigo: 71012165,
+        descricao: "D - ATUALIZAÇÃO DA BASE CADASTRAL AS BUI",
+      },
+      {
+        codigo: 71011549,
+        descricao: "4.1.1 - D -COND. REDE CONV. ATÉ 1/0 AWG",
+      },
+      {
+        codigo: 71012262,
+        descricao: "3.1.1 - R - CHAVE FUSÍVEL - I",
+      },
+      {
+        codigo: 71012263,
+        descricao: "3.1.1 - R - CHAVE FUSÍVEL - D",
+      },
+    ],
+  },
   {
     projeto: 4001439396,
     diagrama: 400221179,

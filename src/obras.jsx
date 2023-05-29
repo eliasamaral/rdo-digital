@@ -12,13 +12,13 @@ const Obras = () => {
     <>
      <Title level={4}>Projetos</Title>
       {obras.map((obra) => (
-        <Space direction="vertical" size={16} key={obra.projeto}>
+        <Space direction="vertical" key={obra.projeto}>
           <Card
             size="small"
             title={obra.local}
             extra={<Link to={`/forms/${obra.projeto}`}>Gerar RDO</Link>}
             style={{
-              width: 300,
+              width: 350,
             }}
           >
             <p>{obra.projeto}</p>
