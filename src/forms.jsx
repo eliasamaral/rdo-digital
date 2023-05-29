@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { Input, Space, Divider, List, InputNumber, Button } from "antd";
+import { Input, Space, Divider, List, InputNumber, Button, Typography } from "antd";
 import { obras } from "./db";
 
 const { TextArea } = Input;
+const { Title } = Typography;
 
 const Forms = () => {
   const { id } = useParams();
@@ -165,23 +166,13 @@ const Forms = () => {
 
     //Teste
 
-    doc.save("table.pdf");
+    doc.save(`${projeto} ${encarregado} ${obra.local}.pdf`);
 
-    // console.log("Valores dos campos de entrada:");
-    // console.log("Projeto:", projeto);
-    // console.log("Encarregado:", encarregado);
-    // console.log("Clima (Manhã):", climaManha);
-    // console.log("Clima (Tarde):", climaTarde);
-    // console.log("Encarregado (Quantidade):", encarregadoQuantidade);
-    // console.log("Motorista (Quantidade):", motoristaQuantidade);
-    // console.log("Eletricista (Quantidade):", eletricistaQuantidade);
-    // console.log("Auxiliar (Quantidade):", auxiliarQuantidade);
-    // console.log("Observações:", observacoes);
-    // console.log("Serviços:", servicos);
   };
 
   return (
     <>
+      <Title level={4}>Formulario</Title>
       <Space>
         <Input
           type="number"

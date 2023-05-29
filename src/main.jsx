@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
 import Forms from "./forms.jsx";
 import Obras from "./obras.jsx";
 
