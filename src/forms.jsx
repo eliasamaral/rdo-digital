@@ -2,7 +2,17 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { Input, Space, Divider, List, InputNumber, Button, Typography } from "antd";
+import dayjs from "dayjs";
+import {
+  Input,
+  Space,
+  Divider,
+  List,
+  InputNumber,
+  Button,
+  Typography,
+  DatePicker,
+} from "antd";
 import { obras } from "./db";
 
 const { TextArea } = Input;
@@ -10,7 +20,6 @@ const { Title } = Typography;
 
 const Forms = () => {
   const { id } = useParams();
-
   const obra = obras.find((obra) => obra.projeto == id);
 
   const [projeto, setProjeto] = useState(obra.projeto);
@@ -22,6 +31,7 @@ const Forms = () => {
   const [eletricistaQuantidade, setEletricistaQuantidade] = useState("");
   const [auxiliarQuantidade, setAuxiliarQuantidade] = useState("");
   const [observacoes, setObservacoes] = useState("Não a observações.");
+  const [dataDaProducao, setdataDaProducao] = useState("");
   const [servicos, setServicos] = useState(
     obra.srv.map((item) => ({ ...item, quantidade: null }))
   );
@@ -57,6 +67,9 @@ const Forms = () => {
       case "observacoes":
         setObservacoes(value);
         break;
+      case "dataDaProducao":
+        setdataDaProducao(value);
+        break;
       case "servicos":
         const updatedServicos = [...servicos];
         updatedServicos[index].quantidade = value;
@@ -80,7 +93,7 @@ const Forms = () => {
 
     doc.setFontSize(12);
     var finalY = doc.lastAutoTable.finalY || 10;
-    doc.text("MT Montagem e Manutenção - Relatorio de Obras", 14, finalY + 8);
+    doc.text("MT Montagem e Manutenção - Relatório de Obras", 14, finalY + 8);
 
     doc.setFontSize(8);
     doc.text(`Gerado em ${dataAtual}`, 170, 10);
@@ -94,6 +107,7 @@ const Forms = () => {
         { header: `Projeto: ${projeto}` },
         { header: `Encarregado: ${encarregado}` },
         { header: `Local: ${obra.local}` },
+        { header: `Data da produção: ${dataDaProducao}` },
       ],
       // theme: 'plain',
     });
@@ -126,7 +140,7 @@ const Forms = () => {
     autoTable(doc, {
       startY: finalY + 20,
       columns: [
-        { header: "Periodo", dataKey: "periodo" },
+        { header: "Período", dataKey: "periodo" },
         { header: "Condição", dataKey: "condição" },
       ],
       body: [
@@ -145,7 +159,7 @@ const Forms = () => {
     autoTable(doc, {
       startY: finalY + 20,
       columns: [
-        { header: "Codigo", dataKey: "codigo" },
+        { header: "Código", dataKey: "codigo" },
         { header: "Descrição", dataKey: "descricao" },
         { header: "Quantidade", dataKey: "quantidade" },
       ],
@@ -164,10 +178,7 @@ const Forms = () => {
       margin: { right: 107 },
     });
 
-    //Teste
-
     doc.save(`${projeto} ${encarregado} ${obra.local}.pdf`);
-
   };
 
   return (
@@ -187,6 +198,14 @@ const Forms = () => {
           name="encarregado"
           value={encarregado}
           onChange={(e) => handleInputChange(e)}
+        />
+        <DatePicker
+          format={"DD/MM/YYYY"}
+          placeholder="Data"
+          onChange={(e) => {
+            const value1 = dayjs(e).format("DD/MM/YYYY");
+            setdataDaProducao(value1);
+          }}
         />
       </Space>
 
