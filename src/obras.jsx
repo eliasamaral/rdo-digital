@@ -6,11 +6,10 @@ import { obras } from "./db";
 
 const { Title } = Typography;
 
-
 const Obras = () => {
   return (
     <>
-     <Title level={4}>Projetos</Title>
+      <Title level={4}>Projetos</Title>
       {obras.map((obra) => (
         <Space direction="vertical" key={obra.projeto}>
           <Card
