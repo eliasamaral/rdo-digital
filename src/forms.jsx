@@ -123,8 +123,9 @@ const Forms = () => {
       columns: [{ header: "Observações", dataKey: "observaçoes" }],
       body: [{ observaçoes: `${observacoes}` }],
       showHead: "firstPage",
-      styles: { overflow: "hidden" },
       margin: { left: 107 },
+      // Override the default above for the text column
+      columnStyles: { text: { cellWidth: "auto" } },
     });
 
     // Mão de obra
