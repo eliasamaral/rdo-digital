@@ -3,8 +3,18 @@ import { useParams } from "react-router-dom";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import dayjs from "dayjs";
-import { Input, Space, Divider, List, InputNumber, Button, Typography, DatePicker } from "antd";
+import {
+  Input,
+  Space,
+  Divider,
+  List,
+  InputNumber,
+  Button,
+  Typography,
+  DatePicker,
+} from "antd";
 import { obras } from "./db";
+import { base64 } from "./base64";
 
 const { TextArea } = Input;
 const { Title } = Typography;
@@ -79,6 +89,7 @@ const Forms = () => {
 
   const gerarPDF = () => {
     const doc = new jsPDF();
+    // doc.addImage( base64 , "JPEG", 0, 0, 210, 297, true);
 
     doc.text("RDO Digital", 14, 10);
 
@@ -94,21 +105,34 @@ const Forms = () => {
     var finalY = doc.lastAutoTable.finalY || 10;
     autoTable(doc, {
       startY: finalY + 20,
-      columns: [
-        { header: `Projeto: ${projeto}` },
-        { header: `Encarregado: ${encarregado}` },
-        { header: `Local: ${obra.local}` },
-        { header: `Data da produção: ${dataDaProducao}` },
+      body: [
+        { funcao: "Projeto:", value: `${projeto}` },
+        { funcao: "Encarregado:", value: `${encarregado}` },
+        { funcao: "Local:", value: `${obra.local}` },
+        { funcao: "Data:", value: `${dataDaProducao}` },
       ],
+      showHead: "firstPage",
+      styles: { overflow: "hidden" },
+      margin: { right: 107 },
       // theme: 'plain',
+    });
+    // Observaçoes
+    doc.setFontSize(12);
+    autoTable(doc, {
+      startY: finalY + 20,
+      columns: [{ header: "Observações", dataKey: "observaçoes" }],
+      body: [{ observaçoes: `${observacoes}` }],
+      showHead: "firstPage",
+      styles: { overflow: "hidden" },
+      margin: { left: 107 },
     });
 
     // Mão de obra
     doc.setFontSize(12);
     var finalY = doc.lastAutoTable.finalY || 10;
-    doc.text("Mão de obra", 14, finalY + 15);
+    doc.text("Mão de obra", 14, finalY + 25);
     autoTable(doc, {
-      startY: finalY + 20,
+      startY: finalY + 30,
       columns: [
         { header: "Função", dataKey: "funcao" },
         { header: "Quantidade", dataKey: "quantidade" },
@@ -126,10 +150,9 @@ const Forms = () => {
 
     // Clima
     doc.setFontSize(12);
-    var finalY = doc.lastAutoTable.finalY || 10;
-    doc.text("Condições Climaticas", 14, finalY + 15);
+    doc.text("Condições Climaticas", 107, finalY + 25);
     autoTable(doc, {
-      startY: finalY + 20,
+      startY: finalY + 30,
       columns: [
         { header: "Período", dataKey: "periodo" },
         { header: "Condição", dataKey: "condição" },
@@ -140,33 +163,21 @@ const Forms = () => {
       ],
       showHead: "firstPage",
       styles: { overflow: "hidden" },
-      margin: { right: 107 },
+      margin: { left: 107 },
     });
 
     //Serviços
     doc.setFontSize(12);
     var finalY = doc.lastAutoTable.finalY || 10;
-    doc.text("Serviços executados", 14, finalY + 15);
+    doc.text("Serviços executados", 14, finalY + 25);
     autoTable(doc, {
-      startY: finalY + 20,
+      startY: finalY + 30,
       columns: [
         { header: "Código", dataKey: "codigo" },
         { header: "Descrição", dataKey: "descricao" },
         { header: "Quantidade", dataKey: "quantidade" },
       ],
       body: servicos,
-    });
-
-    // Observaçoes
-    doc.setFontSize(12);
-    var finalY = doc.lastAutoTable.finalY || 10;
-    autoTable(doc, {
-      startY: finalY + 20,
-      columns: [{ header: "Observações", dataKey: "observaçoes" }],
-      body: [{ observaçoes: `${observacoes}` }],
-      showHead: "firstPage",
-      styles: { overflow: "hidden" },
-      margin: { right: 107 },
     });
 
     doc.save(`${dataDaProducao} ${projeto} ${encarregado} ${obra.local}.pdf`);
