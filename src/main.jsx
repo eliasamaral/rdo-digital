@@ -1,4 +1,6 @@
 import React from "react";
+import { ApolloProvider } from "@apollo/client";
+import { client } from "./lib/apollo";
 import ReactDOM from "react-dom/client";
 import Forms from "./forms.jsx";
 import Obras from "./obras.jsx";
@@ -17,7 +19,7 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  <ApolloProvider client={client}>
     <RouterProvider router={router} />
-  </React.StrictMode>
+  </ApolloProvider>
 );

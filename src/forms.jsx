@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { CREATE_RDO } from "./Schemas";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import dayjs from "dayjs";
@@ -27,16 +29,17 @@ const Forms = () => {
   const [encarregado, setEncarregado] = useState("");
   const [climaManha, setClimaManha] = useState("");
   const [climaTarde, setClimaTarde] = useState("");
-  const [encarregadoQuantidade, setEncarregadoQuantidade] = useState("");
-  const [motoristaQuantidade, setMotoristaQuantidade] = useState("");
-  const [eletricistaQuantidade, setEletricistaQuantidade] = useState("");
-  const [auxiliarQuantidade, setAuxiliarQuantidade] = useState("");
+  const [encarregadoQuantidade, setEncarregadoQuantidade] = useState(0);
+  const [motoristaQuantidade, setMotoristaQuantidade] = useState(0);
+  const [eletricistaQuantidade, setEletricistaQuantidade] = useState(0);
+  const [auxiliarQuantidade, setAuxiliarQuantidade] = useState(0);
   const [observacoes, setObservacoes] = useState("Não a observações.");
   const [dataDaProducao, setdataDaProducao] = useState("");
   const [servicos, setServicos] = useState(
-    obra.srv.map((item) => ({ ...item, quantidade: null }))
+    obra.srv.map((item) => ({ ...item, quantidade: 0 }))
   );
 
+  const [createRDO, { data, loading, error }] = useMutation(CREATE_RDO);
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
 
@@ -54,16 +57,16 @@ const Forms = () => {
         setClimaTarde(value);
         break;
       case "encarregadoQuantidade":
-        setEncarregadoQuantidade(value);
+        setEncarregadoQuantidade(parseInt(value));
         break;
       case "motoristaQuantidade":
-        setMotoristaQuantidade(value);
+        setMotoristaQuantidade(parseInt(value));
         break;
       case "eletricistaQuantidade":
-        setEletricistaQuantidade(value);
+        setEletricistaQuantidade(parseInt(value));
         break;
       case "auxiliarQuantidade":
-        setAuxiliarQuantidade(value);
+        setAuxiliarQuantidade(parseInt(value));
         break;
       case "observacoes":
         setObservacoes(value);
@@ -73,7 +76,7 @@ const Forms = () => {
         break;
       case "servicos":
         const updatedServicos = [...servicos];
-        updatedServicos[index].quantidade = value;
+        updatedServicos[index].quantidade = parseInt(value);
         setServicos(updatedServicos);
         break;
       default:
@@ -81,14 +84,31 @@ const Forms = () => {
     }
   };
 
-  const data = new Date();
-  const dia = String(data.getDate()).padStart(2, "0");
-  const mes = String(data.getMonth() + 1).padStart(2, "0");
-  const ano = data.getFullYear();
+  const date = new Date();
+  const dia = String(date.getDate()).padStart(2, "0");
+  const mes = String(date.getMonth() + 1).padStart(2, "0");
+  const ano = date.getFullYear();
   const dataAtual = dia + "/" + mes + "/" + ano;
 
   const gerarPDF = () => {
+    createRDO({
+      variables: {
+        projeto,
+        encarregado,
+        climaManha,
+        climaTarde,
+        encarregadoQuantidade,
+        motoristaQuantidade,
+        eletricistaQuantidade,
+        auxiliarQuantidade,
+        observacoes,
+        dataDaProducao,
+        servicos,
+      },
+    });
+
     const doc = new jsPDF();
+
     // doc.addImage( base64 , "JPEG", 0, 0, 210, 297, true);
 
     doc.text("RDO Digital", 14, 10);
@@ -281,6 +301,7 @@ const Forms = () => {
           <List.Item>
             <List.Item.Meta title={item.codigo} description={item.descricao} />
             <InputNumber
+              type="number"
               name="servicos"
               value={servicos[index].quantidade}
               onChange={(value) =>

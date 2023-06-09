@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.15",
     "antd": "^5.5.1",
     "dayjs": "^1.11.7",
+    "graphql": "^16.6.0",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.29",
     "react": "^18.2.0",
