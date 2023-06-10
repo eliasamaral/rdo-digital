@@ -225,6 +225,7 @@ const Forms = () => {
         <DatePicker
           format={"DD/MM/YYYY"}
           placeholder="Data"
+          inputReadOnly={true}
           onChange={(e) => {
             const value1 = dayjs(e).format("DD/MM/YYYY");
             setdataDaProducao(value1);

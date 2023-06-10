@@ -17,7 +17,7 @@ const Obras = () => {
             title={obra.local}
             extra={<Link to={`/forms/${obra.projeto}`}>Gerar RDO</Link>}
             style={{
-              width: 350,
+              width: 320,
             }}
           >
             <p>{obra.projeto}</p>
