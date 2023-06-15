@@ -12,6 +12,14 @@ export const obras = [
     local: "Santa Luzia",
     srv: [
       {
+        codigo: 71010001,
+        descricao: "1.2 - PODA ÁRVORE RURAL"
+      },
+      {
+        codigo: 71010011,
+        descricao: "1.4 - CORTE ÁRVORE RURAL"
+      },
+      {
         codigo: 71010037,
         descricao: "13.2 - CONCRETAR BASE",
       },
@@ -114,6 +122,14 @@ export const obras = [
     diagrama: 400212220,
     local: "Santa Luzia",
     srv: [
+      {
+        codigo: 71010001,
+        descricao: "1.2 - PODA ÁRVORE RURAL"
+      },
+      {
+        codigo: 71010011,
+        descricao: "1.4 - CORTE ÁRVORE RURAL"
+      },
       {
         codigo: 71010037,
         descricao: "13.2 - CONCRETAR BASE",
@@ -218,6 +234,14 @@ export const obras = [
     local: "Santa Luzia",
     srv: [
       {
+        codigo: 71010001,
+        descricao: "1.2 - PODA ÁRVORE RURAL"
+      },
+      {
+        codigo: 71010011,
+        descricao: "1.4 - CORTE ÁRVORE RURAL"
+      },
+      {
         codigo: 71010045,
         descricao: "13.6 - ESTAI DE ÂNCORA",
       },
@@ -276,6 +300,14 @@ export const obras = [
     diagrama: 400216551,
     local: "Ibitirama",
     srv: [
+      {
+        codigo: 71010001,
+        descricao: "1.2 - PODA ÁRVORE RURAL"
+      },
+      {
+        codigo: 71010011,
+        descricao: "1.4 - CORTE ÁRVORE RURAL"
+      },
       {
         codigo: 71010170,
         descricao: "8.1 - I - ESTRUTURA PRIMÁRIA - MONO",
@@ -367,6 +399,14 @@ export const obras = [
     diagrama: 400215160,
     local: "Ibitirama",
     srv: [
+      {
+        codigo: 71010001,
+        descricao: "1.2 - PODA ÁRVORE RURAL"
+      },
+      {
+        codigo: 71010011,
+        descricao: "1.4 - CORTE ÁRVORE RURAL"
+      },
       {
         codigo: 71010155,
         descricao: "7.2 - I - ESTAÇÃO TRANSF MONO/ TRI",
@@ -483,6 +523,14 @@ export const obras = [
     local: "Ibitirama",
     srv: [
       {
+        codigo: 71010001,
+        descricao: "1.2 - PODA ÁRVORE RURAL"
+      },
+      {
+        codigo: 71010011,
+        descricao: "1.4 - CORTE ÁRVORE RURAL"
+      },
+      {
         codigo: 71011382,
         descricao: "3.1 - I - CHAVE FACA",
       },
@@ -585,6 +633,14 @@ export const obras = [
     diagrama: 400216506,
     local: "Ibitirama",
     srv: [
+      {
+        codigo: 71010001,
+        descricao: "1.2 - PODA ÁRVORE RURAL"
+      },
+      {
+        codigo: 71010011,
+        descricao: "1.4 - CORTE ÁRVORE RURAL"
+      },
       {
         codigo: 71010101,
         descricao: "4.15 - I - COND PRÉ-REUNIDA - SECUNDÁRIA",

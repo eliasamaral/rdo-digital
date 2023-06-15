@@ -14,6 +14,7 @@ import {
   Button,
   Typography,
   DatePicker,
+  Form,
 } from "antd";
 import { obras } from "./db";
 import { base64 } from "./base64";
@@ -204,8 +205,22 @@ const Forms = () => {
     doc.save(`${dataDaProducao} ${projeto} ${encarregado} ${obra.local}.pdf`);
   };
 
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
+
   return (
-    <>
+    <Form
+      name="basic"
+      labelCol={{ span: 8 }}
+      wrapperCol={{ span: 16 }}
+      style={{ maxWidth: 600 }}
+      initialValues={{ remember: false }}
+      // onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      autoComplete="off"
+    >
       <Title level={4}>Formulário</Title>
       <Space>
         <Input
@@ -236,20 +251,32 @@ const Forms = () => {
       <Divider orientation="left">Clima</Divider>
 
       <Space>
-        <Input
-          addonBefore="Manhã"
-          placeholder="Clima"
-          name="climaManha"
-          value={climaManha}
-          onChange={(e) => handleInputChange(e)}
-        />
-        <Input
-          addonBefore="Tarde"
-          placeholder="Clima"
-          name="climaTarde"
-          value={climaTarde}
-          onChange={(e) => handleInputChange(e)}
-        />
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: "Precisamos de um diagrama ou ordem.",
+            },
+          ]}
+        >
+          <Input
+            addonBefore="Manhã"
+            placeholder="Clima"
+            name="climaManha"
+            value={climaManha}
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Form.Item>
+
+        <Form.Item>
+          <Input
+            addonBefore="Tarde"
+            placeholder="Clima"
+            name="climaTarde"
+            value={climaTarde}
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Form.Item>
       </Space>
 
       <Divider orientation="left">Quantidade de mão de obra</Divider>
@@ -315,10 +342,12 @@ const Forms = () => {
           </List.Item>
         )}
       />
-      <Button type="primary" onClick={gerarPDF}>
-        Enviar
-      </Button>
-    </>
+      <Form.Item>
+        <Button type="primary" htmlType="submit" onClick={gerarPDF}>
+          Enviar
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 
