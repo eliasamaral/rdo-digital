@@ -104,7 +104,7 @@ const Forms = () => {
   const dataAtual = dia + "/" + mes + "/" + ano;
 
   const onFinish = () => {
-    //gerarPDF();
+    gerarPDF();
     createRDO({
       variables: {
         dataAtual,
