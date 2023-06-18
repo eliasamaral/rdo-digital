@@ -41,7 +41,6 @@ export const template1 = (
     showHead: "firstPage",
     styles: { overflow: "hidden" },
     margin: { right: 107 },
-    // theme: 'plain',
   });
   // Observaçoes
   doc.setFontSize(12);

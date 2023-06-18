@@ -79,7 +79,6 @@ const Forms = () => {
       case "servicos":
         const updatedServicos = [...servicos];
         updatedServicos[index].quantidade = value;
-        setServicos(updatedServicos);
 
         break;
       default:
@@ -87,6 +86,12 @@ const Forms = () => {
     }
   };
 
+  // updatedServicos.map((i)=>{
+  //   if(i.quantidade){
+  //     //console.log(i)
+  //     //setServicos(updatedServicos);
+
+  //   } })
 
   const date = new Date();
   const dia = String(date.getDate()).padStart(2, "0");

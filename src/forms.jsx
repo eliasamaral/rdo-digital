@@ -104,8 +104,23 @@ const Forms = () => {
   const dataAtual = dia + "/" + mes + "/" + ano;
 
   const onFinish = () => {
-    gerarPDF()
-    console.log(encarregado);
+    //gerarPDF();
+    createRDO({
+      variables: {
+        dataAtual,
+        projeto,
+        encarregado,
+        observacoes,
+        encarregadoQuantidade,
+        motoristaQuantidade,
+        eletricistaQuantidade,
+        auxiliarQuantidade,
+        climaManha,
+        climaTarde,
+        servicos,
+        dataDaProducao
+      }
+    });
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
