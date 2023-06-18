@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import dayjs from "dayjs";
 import { useMutation } from "@apollo/client";
 import { CREATE_RDO } from "./Schemas";
-
-import { template1, template2 } from "./PDFtemplates";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import dayjs from "dayjs";
 import {
   Input,
   Space,
@@ -17,6 +17,7 @@ import {
   Form,
 } from "antd";
 import { obras } from "./db";
+import { base64 } from "./base64";
 
 const { TextArea } = Input;
 const { Title } = Typography;
@@ -24,20 +25,20 @@ const { Title } = Typography;
 const Forms = () => {
   const { id } = useParams();
   const obra = obras.find((obra) => obra.projeto == id);
-  const servicosObra = obra.srv.map((item) => ({ ...item }));
 
   const [projeto, setProjeto] = useState(obra.projeto);
   const [encarregado, setEncarregado] = useState("");
-  const [dataDaProducao, setdataDaProducao] = useState("");
-  const [climaManha, setClimaManha] = useState("Bom");
-  const [climaTarde, setClimaTarde] = useState("Bom");
-  const [encarregadoQuantidade, setEncarregadoQuantidade] = useState(1);
-  const [motoristaQuantidade, setMotoristaQuantidade] = useState(1);
-  const [eletricistaQuantidade, setEletricistaQuantidade] = useState(3);
-  const [auxiliarQuantidade, setAuxiliarQuantidade] = useState(3);
+  const [climaManha, setClimaManha] = useState("");
+  const [climaTarde, setClimaTarde] = useState("");
+  const [encarregadoQuantidade, setEncarregadoQuantidade] = useState();
+  const [motoristaQuantidade, setMotoristaQuantidade] = useState();
+  const [eletricistaQuantidade, setEletricistaQuantidade] = useState();
+  const [auxiliarQuantidade, setAuxiliarQuantidade] = useState();
   const [observacoes, setObservacoes] = useState("Não a observações.");
-  const [servicos, setServicos] = useState([]);
-  const [quantidadesServicos, setQuantidadesServicos] = useState({});
+  const [dataDaProducao, setdataDaProducao] = useState("");
+  const [servicos, setServicos] = useState(
+    obra.srv.map((item) => ({ ...item }))
+  );
 
   const [createRDO, { data, loading, error }] = useMutation(CREATE_RDO);
 
@@ -76,20 +77,9 @@ const Forms = () => {
         setdataDaProducao(value);
         break;
       case "servicos":
-        const updatedQuantidadesServicos = { ...quantidadesServicos };
-        updatedQuantidadesServicos[index] = value;
-
-        const elementosComQuantidade = servicosObra
-          .map((item, index) => {
-            if (index in updatedQuantidadesServicos) {
-              return { ...item, quantidade: updatedQuantidadesServicos[index] };
-            }
-            return null;
-          })
-          .filter(Boolean);
-
-        setServicos(elementosComQuantidade);
-        setQuantidadesServicos(updatedQuantidadesServicos);
+        const updatedServicos = [...servicos];
+        updatedServicos[index].quantidade = value;
+        setServicos(updatedServicos);
 
         break;
       default:
@@ -97,54 +87,127 @@ const Forms = () => {
     }
   };
 
+
   const date = new Date();
   const dia = String(date.getDate()).padStart(2, "0");
   const mes = String(date.getMonth() + 1).padStart(2, "0");
   const ano = date.getFullYear();
   const dataAtual = dia + "/" + mes + "/" + ano;
 
-  const onFinish = () => {
-    gerarPDF()
-    console.log(encarregado);
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-    alert("Preencha todos os campos");
+  const gerarPDF = () => {
+    // console.log({
+    //   variables: {
+    //     projeto,
+    //     encarregado,
+    //     climaManha,
+    //     climaTarde,
+    //     encarregadoQuantidade,
+    //     motoristaQuantidade,
+    //     eletricistaQuantidade,
+    //     auxiliarQuantidade,
+    //     observacoes,
+    //     dataDaProducao,
+    //     servicos,
+    //   },
+    // });
+
+    const doc = new jsPDF();
+
+    doc.text("RDO Digital", 14, 10);
+
+    doc.setFontSize(12);
+    var finalY = doc.lastAutoTable.finalY || 10;
+    doc.text("MT Montagem e Manutenção - Relatório de Obras", 14, finalY + 8);
+
+    doc.setFontSize(8);
+    doc.text(`Gerado em ${dataAtual}`, 170, 10);
+
+    // Cabeçario
+    doc.setFontSize(12);
+    var finalY = doc.lastAutoTable.finalY || 10;
+    autoTable(doc, {
+      startY: finalY + 20,
+      body: [
+        { funcao: "Projeto:", value: `${projeto}` },
+        { funcao: "Encarregado:", value: `${encarregado}` },
+        { funcao: "Local:", value: `${obra.local}` },
+        { funcao: "Data:", value: `${dataDaProducao}` },
+      ],
+      showHead: "firstPage",
+      styles: { overflow: "hidden" },
+      margin: { right: 107 },
+      // theme: 'plain',
+    });
+    // Observaçoes
+    doc.setFontSize(12);
+    autoTable(doc, {
+      startY: finalY + 20,
+      columns: [{ header: "Observações", dataKey: "observaçoes" }],
+      body: [{ observaçoes: `${observacoes}` }],
+      showHead: "firstPage",
+      margin: { left: 107 },
+      // Override the default above for the text column
+      columnStyles: { text: { cellWidth: "auto" } },
+    });
+
+    // Mão de obra
+    doc.setFontSize(12);
+    var finalY = doc.lastAutoTable.finalY || 10;
+    doc.text("Mão de obra", 14, finalY + 25);
+    autoTable(doc, {
+      startY: finalY + 30,
+      columns: [
+        { header: "Função", dataKey: "funcao" },
+        { header: "Quantidade", dataKey: "quantidade" },
+      ],
+      body: [
+        { funcao: "Encarregado", quantidade: `${encarregadoQuantidade}` },
+        { funcao: "Motorista", quantidade: `${motoristaQuantidade}` },
+        { funcao: "Eletricista", quantidade: `${eletricistaQuantidade}` },
+        { funcao: "Auxiliar", quantidade: `${auxiliarQuantidade}` },
+      ],
+      showHead: "firstPage",
+      styles: { overflow: "hidden" },
+      margin: { right: 107 },
+    });
+
+    // Clima
+    doc.setFontSize(12);
+    doc.text("Condições Climaticas", 107, finalY + 25);
+    autoTable(doc, {
+      startY: finalY + 30,
+      columns: [
+        { header: "Período", dataKey: "periodo" },
+        { header: "Condição", dataKey: "condição" },
+      ],
+      body: [
+        { periodo: "Manhã", condição: `${climaManha}` },
+        { periodo: "Tarde", condição: `${climaTarde}` },
+      ],
+      showHead: "firstPage",
+      styles: { overflow: "hidden" },
+      margin: { left: 107 },
+    });
+
+    //Serviços
+    doc.setFontSize(12);
+    var finalY = doc.lastAutoTable.finalY || 10;
+    doc.text("Serviços executados", 14, finalY + 25);
+    autoTable(doc, {
+      startY: finalY + 30,
+      columns: [
+        { header: "Código", dataKey: "codigo" },
+        { header: "Descrição", dataKey: "descricao" },
+        { header: "Quantidade", dataKey: "quantidade" },
+      ],
+      body: servicos,
+    });
+
+    doc.save(`${dataDaProducao} ${projeto} ${encarregado} ${obra.local}.pdf`);
   };
 
-  const gerarPDF = () => {
-    if (servicos.length > 0) {
-      template1(
-        dataAtual,
-        projeto,
-        encarregado,
-        obra,
-        observacoes,
-        encarregadoQuantidade,
-        motoristaQuantidade,
-        eletricistaQuantidade,
-        auxiliarQuantidade,
-        climaManha,
-        climaTarde,
-        servicos,
-        dataDaProducao
-      );
-    } else {
-      template2(
-        dataAtual,
-        projeto,
-        encarregado,
-        obra,
-        observacoes,
-        encarregadoQuantidade,
-        motoristaQuantidade,
-        eletricistaQuantidade,
-        auxiliarQuantidade,
-        climaManha,
-        climaTarde,
-        dataDaProducao
-      );
-    }
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
   };
 
   return (
@@ -154,61 +217,35 @@ const Forms = () => {
       wrapperCol={{ span: 16 }}
       style={{ maxWidth: 600 }}
       initialValues={{ remember: false }}
-      autoComplete="off"
-      onFinish={onFinish}
+      // onFinish={onFinish}
       onFinishFailed={onFinishFailed}
+      autoComplete="off"
     >
       <Title level={4}>Formulário</Title>
       <Space>
-        <Form.Item>
-          <Input
-            type="number"
-            placeholder="Projeto"
-            name="projeto"
-            value={projeto}
-            onChange={(e) => handleInputChange(e)}
-          />
-        </Form.Item>
-
-        <Form.Item
+        <Input
+          type="number"
+          placeholder="Projeto"
+          name="projeto"
+          value={projeto}
+          onChange={(e) => handleInputChange(e)}
+        />
+        <Input
+          type="text"
+          placeholder="Encarregado"
           name="encarregado"
-          rules={[
-            {
-              required: true,
-              message: "Obrigatorio!",
-            },
-          ]}
-        >
-          <Input
-            type="text"
-            placeholder="Encarregado"
-            name="encarregado"
-            value={encarregado}
-            onChange={(e) => {
-              setEncarregado(e.target.value);
-            }}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="data"
-          rules={[
-            {
-              required: true,
-              message: "Obrigatorio!",
-            },
-          ]}
-        >
-          <DatePicker
-            format={"DD/MM/YYYY"}
-            placeholder="Data"
-            inputReadOnly={true}
-            onChange={(e) => {
-              const value1 = dayjs(e).format("DD/MM/YYYY");
-              setdataDaProducao(value1);
-            }}
-          />
-        </Form.Item>
+          value={encarregado}
+          onChange={(e) => handleInputChange(e)}
+        />
+        <DatePicker
+          format={"DD/MM/YYYY"}
+          placeholder="Data"
+          inputReadOnly={true}
+          onChange={(e) => {
+            const value1 = dayjs(e).format("DD/MM/YYYY");
+            setdataDaProducao(value1);
+          }}
+        />
       </Space>
 
       <Divider orientation="left">Clima</Divider>
@@ -293,8 +330,6 @@ const Forms = () => {
             <List.Item.Meta title={item.codigo} description={item.descricao} />
             <InputNumber
               controls={false}
-              step="0.000"
-              type="number"
               name="servicos"
               onChange={(value) =>
                 handleInputChange(
@@ -307,7 +342,7 @@ const Forms = () => {
         )}
       />
       <Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" onClick={gerarPDF}>
           Enviar
         </Button>
       </Form.Item>
