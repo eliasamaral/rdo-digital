@@ -604,6 +604,14 @@ export const obras = [
     local: "Ibitirama",
     srv: [
       {
+        codigo: 71010077,
+        descricao: "2.3 - I - ATERRAMENTO COM MAIS DE UMA HASTE"
+      },
+      {
+        codigo: 71011487,
+        descricao: "8.2.1 - I - ESTR PRIMÁRIA - BIF/TRIF -TIPO 1"
+      },
+      {
         codigo: 71010001,
         descricao: "1.2 - PODA ÁRVORE RURAL",
       },
@@ -702,6 +710,14 @@ export const obras = [
     diagrama: 400215160,
     local: "Ibitirama",
     srv: [
+      {
+        codigo: 71010077,
+        descricao: "2.3 - I - ATERRAMENTO COM MAIS DE UMA HASTE"
+      },
+      {
+        codigo: 71011487,
+        descricao: "8.2.1 - I - ESTR PRIMÁRIA - BIF/TRIF -TIPO 1"
+      },
       {
         codigo: 71010001,
         descricao: "1.2 - PODA ÁRVORE RURAL",
@@ -826,6 +842,14 @@ export const obras = [
     local: "Ibitirama",
     srv: [
       {
+        codigo: 71010077,
+        descricao: "2.3 - I - ATERRAMENTO COM MAIS DE UMA HASTE"
+      },
+      {
+        codigo: 71011487,
+        descricao: "8.2.1 - I - ESTR PRIMÁRIA - BIF/TRIF -TIPO 1"
+      },
+      {
         codigo: 71010001,
         descricao: "1.2 - PODA ÁRVORE RURAL",
       },
@@ -936,6 +960,14 @@ export const obras = [
     diagrama: 400216506,
     local: "Ibitirama",
     srv: [
+      {
+        codigo: 71010077,
+        descricao: "2.3 - I - ATERRAMENTO COM MAIS DE UMA HASTE"
+      },
+      {
+        codigo: 71011487,
+        descricao: "8.2.1 - I - ESTR PRIMÁRIA - BIF/TRIF -TIPO 1"
+      },
       {
         codigo: 71010001,
         descricao: "1.2 - PODA ÁRVORE RURAL",
