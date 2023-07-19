@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import { useMutation } from "@apollo/client";
 import { CREATE_RDO } from "./Schemas";
+import "dayjs/locale/pt-br";
+import locale from "antd/es/date-picker/locale/pt_BR";
 
 import { template1, template2 } from "./PDFtemplates";
 import {
@@ -118,8 +120,8 @@ const Forms = () => {
         climaManha,
         climaTarde,
         servicos,
-        dataDaProducao
-      }
+        dataDaProducao,
+      },
     });
   };
   const onFinishFailed = (errorInfo) => {
@@ -215,6 +217,7 @@ const Forms = () => {
           ]}
         >
           <DatePicker
+            locale={locale}
             format={"DD/MM/YYYY"}
             placeholder="Data"
             inputReadOnly={true}
