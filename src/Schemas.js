@@ -4,6 +4,8 @@ import { gql } from "@apollo/client";
 export const CREATE_RDO = gql`
   mutation (
     $projeto: Float
+    $diagrama: Float
+    $local: String
     $auxiliarQuantidade: Int
     $eletricistaQuantidade: Int
     $encarregadoQuantidade: Int
@@ -20,14 +22,16 @@ export const CREATE_RDO = gql`
     createRDO(
       data: {
         projeto: $projeto
-        auxiliarQuantidade: $auxiliarQuantidade
-        eletricistaQuantidade: $eletricistaQuantidade
+        encarregado: $encarregado
+        diagrama: $diagrama
+        local: $local
         encarregadoQuantidade: $encarregadoQuantidade
+        dataDaProducao: $dataDaProducao
+        eletricistaQuantidade: $eletricistaQuantidade
         motoristaQuantidade: $motoristaQuantidade
+        auxiliarQuantidade: $auxiliarQuantidade
         climaManha: $climaManha
         climaTarde: $climaTarde
-        dataDaProducao: $dataDaProducao
-        encarregado: $encarregado
         observacoes: $observacoes
         servicos: $servicos
         }

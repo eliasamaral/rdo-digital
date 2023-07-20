@@ -29,6 +29,8 @@ const Forms = () => {
   const servicosObra = obra.srv.map((item) => ({ ...item }));
 
   const [projeto, setProjeto] = useState(obra.projeto);
+  const [diagrama, setDiagrama] = useState(obra.diagrama);
+  const [local, setLocal] = useState(obra.local);
   const [encarregado, setEncarregado] = useState("");
   const [dataDaProducao, setdataDaProducao] = useState("");
   const [climaManha, setClimaManha] = useState("Bom");
@@ -107,10 +109,13 @@ const Forms = () => {
 
   const onFinish = () => {
     gerarPDF();
+
     createRDO({
       variables: {
         dataAtual,
         projeto,
+        diagrama,
+        local,
         encarregado,
         observacoes,
         encarregadoQuantidade,
