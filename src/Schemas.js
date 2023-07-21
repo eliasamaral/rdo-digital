@@ -37,7 +37,7 @@ export const CREATE_RDO = gql`
         }
     ) 
     {
-      id
+      _id
       encarregado
     }
   }
