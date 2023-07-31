@@ -1,6 +1,33 @@
 import { gql } from "@apollo/client";
 
 
+
+export const GET_PROJETOS = gql`
+  query {
+    getProjetos {
+      id
+      projeto
+      local
+    }
+  }
+`;
+
+
+export const GET_PROJETO = gql`
+  query ($projeto: Float!) {
+    getProjeto(projeto: $projeto) {
+      projeto
+      local
+      diagrama
+      RDODigital {
+        codigo
+        descricao
+        id
+      }
+    }
+  }
+`;
+
 export const CREATE_RDO = gql`
   mutation (
     $projeto: Float
@@ -16,8 +43,6 @@ export const CREATE_RDO = gql`
     $encarregado: String
     $observacoes: String
     $servicos: [SRVInput]
-
-    
   ) {
     createRDO(
       data: {
@@ -34,9 +59,8 @@ export const CREATE_RDO = gql`
         climaTarde: $climaTarde
         observacoes: $observacoes
         servicos: $servicos
-        }
-    ) 
-    {
+      }
+    ) {
       _id
       encarregado
     }

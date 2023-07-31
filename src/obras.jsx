@@ -1,16 +1,40 @@
 import React from "react";
+import { useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
-import { Card, Space, Typography } from "antd";
+import { Card, Space, Spin, Typography } from "antd";
 
-import { obras } from "./db";
+import { GET_PROJETOS } from "./Schemas";
 
 const { Title } = Typography;
 
 const Obras = () => {
+  const { data, loading, error } = useQuery(GET_PROJETOS);
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          height: "100vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Spin />
+      </div>
+    );
+  }
+
+  if (error) {
+    console.log(error);
+  }
+
+  const { getProjetos } = data;
+
   return (
     <>
       <Title level={4}>Projetos</Title>
-      {obras.map((obra) => (
+      {getProjetos.map((obra) => (
         <Space direction="vertical" key={obra.projeto}>
           <Card
             size="small"

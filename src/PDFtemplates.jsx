@@ -5,7 +5,7 @@ export const template1 = (
   dataAtual,
   projeto,
   encarregado,
-  obra,
+  getProjeto,
   observacoes,
   encarregadoQuantidade,
   motoristaQuantidade,
@@ -35,7 +35,7 @@ export const template1 = (
     body: [
       { funcao: "Projeto:", value: `${projeto}` },
       { funcao: "Encarregado:", value: `${encarregado}` },
-      { funcao: "Local:", value: `${obra.local}` },
+      { funcao: "Local:", value: `${getProjeto.local}` },
       { funcao: "Data:", value: `${dataDaProducao}` },
     ],
     showHead: "firstPage",
@@ -106,14 +106,14 @@ export const template1 = (
     body: servicos,
   });
 
-  doc.save(`${dataDaProducao} ${projeto} ${encarregado} ${obra.local}.pdf`);
+  doc.save(`${dataDaProducao} ${projeto} ${encarregado} ${getProjeto.local}.pdf`);
 };
 
 export const template2 = (
   dataAtual,
   projeto,
   encarregado,
-  obra,
+  getProjeto,
   observacoes,
   encarregadoQuantidade,
   motoristaQuantidade,
@@ -143,7 +143,7 @@ export const template2 = (
     body: [
       { funcao: "Projeto:", value: `${projeto}` },
       { funcao: "Encarregado:", value: `${encarregado}` },
-      { funcao: "Local:", value: `${obra.local}` },
+      { funcao: "Local:", value: `${getProjeto.local}` },
       { funcao: "Data:", value: `${dataDaProducao}` },
     ],
     showHead: "firstPage",
@@ -198,5 +198,5 @@ export const template2 = (
     columnStyles: { text: { cellWidth: "auto" } },
   });
 
-  doc.save(`${dataDaProducao} ${projeto} ${encarregado} ${obra.local}.pdf`);
+  doc.save(`${dataDaProducao} ${projeto} ${encarregado} ${getProjeto.local}.pdf`);
 };

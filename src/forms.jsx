@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import dayjs from "dayjs";
-import { useMutation } from "@apollo/client";
-import { CREATE_RDO } from "./Schemas";
+import { useMutation, useQuery } from "@apollo/client";
+import { CREATE_RDO, GET_PROJETO } from "./Schemas";
 import "dayjs/locale/pt-br";
 import locale from "antd/es/date-picker/locale/pt_BR";
 
@@ -17,20 +17,23 @@ import {
   Typography,
   DatePicker,
   Form,
+  Spin,
 } from "antd";
-import { obras } from "./db";
 
 const { TextArea } = Input;
 const { Title } = Typography;
 
 const Forms = () => {
   const { id } = useParams();
-  const obra = obras.find((obra) => obra.projeto == id);
-  const servicosObra = obra.srv.map((item) => ({ ...item }));
+  const [createRDO] = useMutation(CREATE_RDO);
 
-  const [projeto, setProjeto] = useState(obra.projeto);
-  const [diagrama, setDiagrama] = useState(obra.diagrama);
-  const [local, setLocal] = useState(obra.local);
+  const { data, loading, error } = useQuery(GET_PROJETO, {
+    variables: { projeto: parseFloat(id) },
+  });
+
+  const [projeto, setProjeto] = useState( parseFloat(id));
+  const [diagrama, setDiagrama] = useState();
+  const [local, setLocal] = useState();
   const [encarregado, setEncarregado] = useState("");
   const [dataDaProducao, setdataDaProducao] = useState("");
   const [climaManha, setClimaManha] = useState("Bom");
@@ -43,14 +46,34 @@ const Forms = () => {
   const [servicos, setServicos] = useState([]);
   const [quantidadesServicos, setQuantidadesServicos] = useState({});
 
-  const [createRDO, { data, loading, error }] = useMutation(CREATE_RDO);
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          height: "100vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Spin />
+      </div>
+    );
+  }
+
+  if (error) {
+    console.log(error);
+  }
+
+  const { getProjeto } = data;
+  const servicosObra = getProjeto.RDODigital.map((item) => ({ ...item }));
 
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
 
     switch (name) {
       case "projeto":
-        setProjeto(value);
+        setProjeto(parseFloat(value));
         break;
       case "encarregado":
         setEncarregado(value);
@@ -140,7 +163,7 @@ const Forms = () => {
         dataAtual,
         projeto,
         encarregado,
-        obra,
+        getProjeto,
         observacoes,
         encarregadoQuantidade,
         motoristaQuantidade,
@@ -156,7 +179,7 @@ const Forms = () => {
         dataAtual,
         projeto,
         encarregado,
-        obra,
+        getProjeto,
         observacoes,
         encarregadoQuantidade,
         motoristaQuantidade,
@@ -310,7 +333,7 @@ const Forms = () => {
       <Divider orientation="left">Serviços executados</Divider>
       <List
         itemLayout="horizontal"
-        dataSource={obra.srv}
+        dataSource={getProjeto.RDODigital}
         renderItem={(item, index) => (
           <List.Item>
             <List.Item.Meta title={item.codigo} description={item.descricao} />
