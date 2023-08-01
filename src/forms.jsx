@@ -25,13 +25,14 @@ const { Title } = Typography;
 
 const Forms = () => {
   const { id } = useParams();
+
   const [createRDO] = useMutation(CREATE_RDO);
 
   const { data, loading, error } = useQuery(GET_PROJETO, {
     variables: { projeto: parseFloat(id) },
   });
 
-  const [projeto, setProjeto] = useState( parseFloat(id));
+  const [projeto, setProjeto] = useState(parseFloat(id));
   const [diagrama, setDiagrama] = useState();
   const [local, setLocal] = useState();
   const [encarregado, setEncarregado] = useState("");
@@ -61,9 +62,7 @@ const Forms = () => {
     );
   }
 
-  if (error) {
-    console.log(error);
-  }
+  if (error) return `Submission error! ${error.message}`;
 
   const { getProjeto } = data;
   const servicosObra = getProjeto.RDODigital.map((item) => ({ ...item }));
@@ -151,6 +150,8 @@ const Forms = () => {
         dataDaProducao,
       },
     });
+
+    console.log(servicos);
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);

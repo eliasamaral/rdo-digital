@@ -1,7 +1,5 @@
 import { gql } from "@apollo/client";
 
-
-
 export const GET_PROJETOS = gql`
   query {
     getProjetos {
@@ -12,7 +10,6 @@ export const GET_PROJETOS = gql`
   }
 `;
 
-
 export const GET_PROJETO = gql`
   query ($projeto: Float!) {
     getProjeto(projeto: $projeto) {
@@ -22,11 +19,12 @@ export const GET_PROJETO = gql`
       RDODigital {
         codigo
         descricao
-        id
+        
       }
     }
   }
 `;
+
 
 export const CREATE_RDO = gql`
   mutation (
