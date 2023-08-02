@@ -65,6 +65,7 @@ const Forms = () => {
   if (error) return `Submission error! ${error.message}`;
 
   const { getProjeto } = data;
+
   const servicosObra = getProjeto.RDODigital.map((item) => ({ ...item }));
 
   const handleInputChange = (e, index) => {
@@ -132,6 +133,9 @@ const Forms = () => {
   const onFinish = () => {
     gerarPDF();
 
+    setDiagrama(getProjeto.diagrama)
+    setLocal(getProjeto.local)
+
     createRDO({
       variables: {
         dataAtual,
@@ -150,8 +154,6 @@ const Forms = () => {
         dataDaProducao,
       },
     });
-
-    console.log(servicos);
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -159,6 +161,9 @@ const Forms = () => {
   };
 
   const gerarPDF = () => {
+
+    console.log(diagrama, local);
+
     if (servicos.length > 0) {
       template1(
         dataAtual,

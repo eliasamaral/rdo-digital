@@ -32,23 +32,23 @@ const Obras = () => {
   const { getProjetos } = data;
 
   return (
-    <>
+    <Space direction="vertical" align="center">
       <Title level={4}>Projetos</Title>
+
       {getProjetos.map((obra) => (
-        <Space direction="vertical" key={obra.projeto}>
-          <Card
-            size="small"
-            title={obra.local}
-            extra={<Link to={`/forms/${obra.projeto}`}>Gerar RDO</Link>}
-            style={{
-              width: 320,
-            }}
-          >
-            <p>{obra.projeto}</p>
-          </Card>
-        </Space>
+        <Card
+          size="small"
+          key={obra.projeto}
+          title={obra.local}
+          extra={<Link to={`/forms/${obra.projeto}`}>Gerar RDO</Link>}
+          style={{
+            width: 300,
+          }}
+        >
+          <p>{obra.projeto}</p>
+        </Card>
       ))}
-    </>
+    </Space>
   );
 };
 
