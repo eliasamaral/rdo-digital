@@ -2,7 +2,6 @@ import React from "react";
 import { useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { Card, Space, Spin, Typography } from "antd";
-
 import { GET_PROJETOS } from "./Schemas";
 
 const { Title } = Typography;
@@ -34,7 +33,6 @@ const Obras = () => {
   return (
     <Space direction="vertical" align="center">
       <Title level={4}>Projetos</Title>
-
       {getProjetos.map((obra) => (
         <Card
           size="small"

@@ -6,7 +6,9 @@ import { CREATE_RDO, GET_PROJETO } from "./Schemas";
 import "dayjs/locale/pt-br";
 import locale from "antd/es/date-picker/locale/pt_BR";
 
-import { template1, template2 } from "./PDFtemplates";
+import RDO_default from "./PDFtemplates/RDO_default";
+import RDO_no_services from "./PDFtemplates/RDO_no_services";
+
 import {
   Input,
   Space,
@@ -18,10 +20,11 @@ import {
   DatePicker,
   Form,
   Spin,
+  Radio,
 } from "antd";
 
 const { TextArea } = Input;
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const Forms = () => {
   const { id } = useParams();
@@ -32,20 +35,23 @@ const Forms = () => {
     variables: { projeto: parseFloat(id) },
   });
 
-  const [projeto, setProjeto] = useState(parseFloat(id));
-  const [diagrama, setDiagrama] = useState();
-  const [local, setLocal] = useState();
   const [encarregado, setEncarregado] = useState("");
   const [dataDaProducao, setdataDaProducao] = useState("");
-  const [climaManha, setClimaManha] = useState("Bom");
-  const [climaTarde, setClimaTarde] = useState("Bom");
-  const [encarregadoQuantidade, setEncarregadoQuantidade] = useState(1);
-  const [motoristaQuantidade, setMotoristaQuantidade] = useState(1);
-  const [eletricistaQuantidade, setEletricistaQuantidade] = useState(3);
-  const [auxiliarQuantidade, setAuxiliarQuantidade] = useState(3);
+  const [clima, setClima] = useState({
+    manha: "Bom",
+    tarde: "Bom",
+  });
+  const [maoDeObra, setMaoDeObra] = useState({
+    encarregado: 1,
+    motorista: 1,
+    eletricista: 3,
+    auxiliar: 3,
+  });
+
   const [observacoes, setObservacoes] = useState("Não a observações.");
   const [servicos, setServicos] = useState([]);
   const [quantidadesServicos, setQuantidadesServicos] = useState({});
+  const [isFinal, setIsFinal] = useState();
 
   if (loading) {
     return (
@@ -64,9 +70,9 @@ const Forms = () => {
 
   if (error) return `Submission error! ${error.message}`;
 
-  const { getProjeto } = data;
+  const { projeto, diagrama, local, RDODigital } = data.getProjeto;
 
-  const servicosObra = getProjeto.RDODigital.map((item) => ({ ...item }));
+  const servicosObra = RDODigital.map((item) => ({ ...item }));
 
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -79,22 +85,22 @@ const Forms = () => {
         setEncarregado(value);
         break;
       case "climaManha":
-        setClimaManha(value);
+        setClima({ ...clima, manha: value });
         break;
       case "climaTarde":
-        setClimaTarde(value);
+        setClima({ ...clima, tarde: value });
         break;
       case "encarregadoQuantidade":
-        setEncarregadoQuantidade(value);
+        setMaoDeObra({ ...maoDeObra, encarregado: value });
         break;
       case "motoristaQuantidade":
-        setMotoristaQuantidade(value);
+        setMaoDeObra({ ...maoDeObra, motorista: value });
         break;
       case "eletricistaQuantidade":
-        setEletricistaQuantidade(value);
+        setMaoDeObra({ ...maoDeObra, eletricista: value });
         break;
       case "auxiliarQuantidade":
-        setAuxiliarQuantidade(value);
+        setMaoDeObra({ ...maoDeObra, auxiliar: value });
         break;
       case "observacoes":
         setObservacoes(value);
@@ -133,68 +139,54 @@ const Forms = () => {
   const onFinish = () => {
     gerarPDF();
 
-    setDiagrama(getProjeto.diagrama)
-    setLocal(getProjeto.local)
-
-    createRDO({
-      variables: {
-        dataAtual,
-        projeto,
-        diagrama,
-        local,
-        encarregado,
-        observacoes,
-        encarregadoQuantidade,
-        motoristaQuantidade,
-        eletricistaQuantidade,
-        auxiliarQuantidade,
-        climaManha,
-        climaTarde,
-        servicos,
-        dataDaProducao,
-      },
-    });
+    // createRDO({
+    //   variables: {
+    //     dataAtual,
+    //     projeto,
+    //     diagrama,
+    //     local,
+    //     encarregado,
+    //     observacoes,
+    //     encarregadoQuantidade,
+    //     motoristaQuantidade,
+    //     eletricistaQuantidade,
+    //     auxiliarQuantidade,
+    //     climaManha,
+    //     climaTarde,
+    //     servicos,
+    //     dataDaProducao,
+    //   },
+    // });
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
     alert("Preencha todos os campos");
   };
 
+  const onChangeRadioButton = (e) => {
+    setIsFinal(e.target.value);
+  };
   const gerarPDF = () => {
+    const pdfData = {
+      dataAtual,
+      projeto,
+      diagrama,
+      local,
+      encarregado,
+      observacoes,
+      maoDeObra,
+      clima,
+      servicos,
+      dataDaProducao,
+      isFinal,
+    };
 
-    console.log(diagrama, local);
+    console.log(pdfData);
 
     if (servicos.length > 0) {
-      template1(
-        dataAtual,
-        projeto,
-        encarregado,
-        getProjeto,
-        observacoes,
-        encarregadoQuantidade,
-        motoristaQuantidade,
-        eletricistaQuantidade,
-        auxiliarQuantidade,
-        climaManha,
-        climaTarde,
-        servicos,
-        dataDaProducao
-      );
+      RDO_default(pdfData);
     } else {
-      template2(
-        dataAtual,
-        projeto,
-        encarregado,
-        getProjeto,
-        observacoes,
-        encarregadoQuantidade,
-        motoristaQuantidade,
-        eletricistaQuantidade,
-        auxiliarQuantidade,
-        climaManha,
-        climaTarde,
-        dataDaProducao
-      );
+      RDO_no_services(pdfData);
     }
   };
 
@@ -203,24 +195,75 @@ const Forms = () => {
       name="basic"
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 600 }}
+      style={{ maxWidth: 600, margin: "20px 10px" }}
       initialValues={{ remember: false }}
       autoComplete="off"
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
     >
-      <Title level={4}>Formulário</Title>
-      <Space>
-        <Form.Item>
-          <Input
-            type="number"
-            placeholder="Projeto"
-            name="projeto"
-            value={projeto}
-            onChange={(e) => handleInputChange(e)}
-          />
-        </Form.Item>
+      <Space
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Title level={4} style={{ margin: "0px" }}>
+          Relatório de obras
+        </Title>
 
+        <Button type="primary" htmlType="submit">
+          Gerar PDF
+        </Button>
+      </Space>
+
+      <Divider />
+
+      <Space
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Title type="secondary" level={5} style={{ margin: "0px" }}>
+          Projeto
+        </Title>
+        <Title level={5} style={{ margin: "0px" }}>
+          {projeto}
+        </Title>
+      </Space>
+      <Space
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Title type="secondary" level={5} style={{ margin: "0px" }}>
+          Diagrama
+        </Title>
+        <Title level={5} style={{ margin: "0px" }}>
+          {diagrama}
+        </Title>
+      </Space>
+      <Space
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Title type="secondary" level={5} style={{ margin: "0px" }}>
+          Local
+        </Title>
+        <Title level={5} style={{ margin: "0px" }}>
+          {local}
+        </Title>
+      </Space>
+      <Divider orientation="left">Informante</Divider>
+
+      <Space>
         <Form.Item
           name="encarregado"
           rules={[
@@ -263,6 +306,23 @@ const Forms = () => {
         </Form.Item>
       </Space>
 
+      <Divider orientation="left">Status da obra</Divider>
+
+      <Form.Item
+        name="isFinal"
+        rules={[
+          {
+            required: true,
+            message: "Obrigatorio!",
+          },
+        ]}
+      >
+        <Radio.Group onChange={onChangeRadioButton} value={isFinal}>
+          <Radio value={true}>Final</Radio>
+          <Radio value={false}>Parcial</Radio>
+        </Radio.Group>
+      </Form.Item>
+
       <Divider orientation="left">Clima</Divider>
 
       <Space>
@@ -278,7 +338,7 @@ const Forms = () => {
             addonBefore="Manhã"
             placeholder="Clima"
             name="climaManha"
-            value={climaManha}
+            value={clima.manha}
             onChange={(e) => handleInputChange(e)}
           />
         </Form.Item>
@@ -288,7 +348,7 @@ const Forms = () => {
             addonBefore="Tarde"
             placeholder="Clima"
             name="climaTarde"
-            value={climaTarde}
+            value={clima.tarde}
             onChange={(e) => handleInputChange(e)}
           />
         </Form.Item>
@@ -297,34 +357,42 @@ const Forms = () => {
       <Divider orientation="left">Quantidade de mão de obra</Divider>
 
       <Space>
-        <Input
-          type="number"
-          placeholder="Encarregado"
-          name="encarregadoQuantidade"
-          value={encarregadoQuantidade}
-          onChange={(e) => handleInputChange(e)}
-        />
-        <Input
-          type="number"
-          placeholder="Motorista"
-          name="motoristaQuantidade"
-          value={motoristaQuantidade}
-          onChange={(e) => handleInputChange(e)}
-        />
-        <Input
-          type="number"
-          placeholder="Eletricista"
-          name="eletricistaQuantidade"
-          value={eletricistaQuantidade}
-          onChange={(e) => handleInputChange(e)}
-        />
-        <Input
-          type="number"
-          placeholder="Auxiliar"
-          name="auxiliarQuantidade"
-          value={auxiliarQuantidade}
-          onChange={(e) => handleInputChange(e)}
-        />
+        <Space direction="vertical">
+          <Text style={{ margin: "0px", fontSize: "13px" }}>Encarregado</Text>
+          <Input
+            type="number"
+            name="encarregadoQuantidade"
+            value={maoDeObra.encarregado}
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Space>
+        <Space direction="vertical">
+          <Text style={{ margin: "0px", fontSize: "13px" }}>Motorista</Text>
+          <Input
+            type="number"
+            name="motoristaQuantidade"
+            value={maoDeObra.motorista}
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Space>
+        <Space direction="vertical">
+          <Text style={{ margin: "0px", fontSize: "13px" }}>Eletricista</Text>
+          <Input
+            type="number"
+            name="eletricistaQuantidade"
+            value={maoDeObra.eletricista}
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Space>
+        <Space direction="vertical">
+          <Text style={{ margin: "0px", fontSize: "13px" }}>Auxiliar</Text>
+          <Input
+            type="number"
+            name="auxiliarQuantidade"
+            value={maoDeObra.auxiliar}
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Space>
       </Space>
 
       <Divider orientation="left">Observações</Divider>
@@ -339,7 +407,7 @@ const Forms = () => {
       <Divider orientation="left">Serviços executados</Divider>
       <List
         itemLayout="horizontal"
-        dataSource={getProjeto.RDODigital}
+        dataSource={RDODigital}
         renderItem={(item, index) => (
           <List.Item>
             <List.Item.Meta title={item.codigo} description={item.descricao} />
@@ -358,11 +426,12 @@ const Forms = () => {
           </List.Item>
         )}
       />
-      <Form.Item>
+
+      <Space style={{marginBlock: "10px"}}>
         <Button type="primary" htmlType="submit">
-          Enviar
+          Gerar PDF
         </Button>
-      </Form.Item>
+      </Space>
     </Form>
   );
 };

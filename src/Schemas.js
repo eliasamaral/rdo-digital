@@ -19,12 +19,20 @@ export const GET_PROJETO = gql`
       RDODigital {
         codigo
         descricao
-        
       }
     }
   }
 `;
 
+export const CODIGO_BY_TYPE = gql`
+  query ($type: String!) {
+    codigoByType(type: $type) {
+      _id
+      description
+      code
+    }
+  }
+`;
 
 export const CREATE_RDO = gql`
   mutation (
