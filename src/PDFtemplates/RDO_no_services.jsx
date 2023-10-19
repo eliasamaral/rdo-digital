@@ -13,9 +13,8 @@ const RDO_no_services = ({
   isFinal,
 }) => {
   const doc = new jsPDF();
-  const logo = new Image()
+  const logo = new URL( "/src/assets/volt.png", import.meta.url).href  
   
-  logo.src = "../src/assets/volt.png"
   doc.addImage(logo, "png", 15, 10, )
 
 
