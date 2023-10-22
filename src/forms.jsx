@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+import {useParams, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_RDO, GET_PROJETO } from "./Schemas";
@@ -28,11 +28,12 @@ const { Title, Text } = Typography;
 
 const Forms = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const { data, loading, error } = useQuery(GET_PROJETO, {
     variables: { projeto: parseFloat(id) },
   });
-  const [createRDO] = useMutation(CREATE_RDO);
+  const [createRDO, { data: createRDOdata }] = useMutation(CREATE_RDO);
 
   const [encarregado, setEncarregado] = useState("");
   const [dataDaProducao, setdataDaProducao] = useState("");
@@ -66,6 +67,10 @@ const Forms = () => {
       </div>
     );
   }
+  if (createRDOdata) {
+    console.log("Success", createRDOdata);
+    navigate("/");
+  }
 
   if (error) return `Submission error! ${error.message}`;
 
@@ -77,9 +82,6 @@ const Forms = () => {
     const { name, value } = e.target;
 
     switch (name) {
-      case "projeto":
-        setProjeto(parseFloat(value));
-        break;
       case "encarregado":
         setEncarregado(value);
         break;
@@ -154,27 +156,12 @@ const Forms = () => {
       isFinal,
     };
 
+    createRDO({
+      variables: data,
+    });
     gerarPDF(data);
-
-    // createRDO({
-    //   variables: {
-    //     dataAtual,
-    //     projeto,
-    //     diagrama,
-    //     local,
-    //     encarregado,
-    //     observacoes,
-    //     encarregadoQuantidade,
-    //     motoristaQuantidade,
-    //     eletricistaQuantidade,
-    //     auxiliarQuantidade,
-    //     climaManha,
-    //     climaTarde,
-    //     servicos,
-    //     dataDaProducao,
-    //   },
-    // });
   };
+
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
     alert("Preencha todos os campos");
