@@ -38,37 +38,29 @@ export const CREATE_RDO = gql`
   mutation (
     $projeto: Float
     $diagrama: Float
-    $local: String
-    $auxiliarQuantidade: Int
-    $eletricistaQuantidade: Int
-    $encarregadoQuantidade: Int
-    $motoristaQuantidade: Int
-    $climaManha: String
-    $climaTarde: String
-    $dataDaProducao: String
     $encarregado: String
+    $local: String
+    $dataDaProducao: String
+    $clima: ClimaInput
+    $maoDeObra: maoDeObraInput
     $observacoes: String
     $servicos: [SRVInput]
   ) {
     createRDO(
       data: {
         projeto: $projeto
-        encarregado: $encarregado
         diagrama: $diagrama
+        encarregado: $encarregado
         local: $local
-        encarregadoQuantidade: $encarregadoQuantidade
         dataDaProducao: $dataDaProducao
-        eletricistaQuantidade: $eletricistaQuantidade
-        motoristaQuantidade: $motoristaQuantidade
-        auxiliarQuantidade: $auxiliarQuantidade
-        climaManha: $climaManha
-        climaTarde: $climaTarde
+        clima: $clima
+        maoDeObra: $maoDeObra
         observacoes: $observacoes
         servicos: $servicos
       }
     ) {
       _id
-      encarregado
+      
     }
   }
 `;

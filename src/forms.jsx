@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+import {useParams, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_RDO, GET_PROJETO } from "./Schemas";
@@ -28,12 +28,12 @@ const { Title, Text } = Typography;
 
 const Forms = () => {
   const { id } = useParams();
-
-  const [createRDO] = useMutation(CREATE_RDO);
+  const navigate = useNavigate();
 
   const { data, loading, error } = useQuery(GET_PROJETO, {
     variables: { projeto: parseFloat(id) },
   });
+  const [createRDO, { data: createRDOdata }] = useMutation(CREATE_RDO);
 
   const [encarregado, setEncarregado] = useState("");
   const [dataDaProducao, setdataDaProducao] = useState("");
@@ -67,6 +67,10 @@ const Forms = () => {
       </div>
     );
   }
+  if (createRDOdata) {
+    console.log("Success", createRDOdata);
+    navigate("/");
+  }
 
   if (error) return `Submission error! ${error.message}`;
 
@@ -78,9 +82,6 @@ const Forms = () => {
     const { name, value } = e.target;
 
     switch (name) {
-      case "projeto":
-        setProjeto(parseFloat(value));
-        break;
       case "encarregado":
         setEncarregado(value);
         break;
@@ -110,7 +111,11 @@ const Forms = () => {
         break;
       case "servicos":
         const updatedQuantidadesServicos = { ...quantidadesServicos };
-        updatedQuantidadesServicos[index] = value;
+        if (value === null || value === "") {
+          delete updatedQuantidadesServicos[index];
+        } else {
+          updatedQuantidadesServicos[index] = value;
+        }
 
         const elementosComQuantidade = servicosObra
           .map((item, index) => {
@@ -137,37 +142,7 @@ const Forms = () => {
   const dataAtual = dia + "/" + mes + "/" + ano;
 
   const onFinish = () => {
-    gerarPDF();
-
-    // createRDO({
-    //   variables: {
-    //     dataAtual,
-    //     projeto,
-    //     diagrama,
-    //     local,
-    //     encarregado,
-    //     observacoes,
-    //     encarregadoQuantidade,
-    //     motoristaQuantidade,
-    //     eletricistaQuantidade,
-    //     auxiliarQuantidade,
-    //     climaManha,
-    //     climaTarde,
-    //     servicos,
-    //     dataDaProducao,
-    //   },
-    // });
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-    alert("Preencha todos os campos");
-  };
-
-  const onChangeRadioButton = (e) => {
-    setIsFinal(e.target.value);
-  };
-  const gerarPDF = () => {
-    const pdfData = {
+    const data = {
       dataAtual,
       projeto,
       diagrama,
@@ -181,13 +156,28 @@ const Forms = () => {
       isFinal,
     };
 
-    console.log(pdfData);
+    createRDO({
+      variables: data,
+    });
+    gerarPDF(data);
+  };
 
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+    alert("Preencha todos os campos");
+  };
+
+  const onChangeRadioButton = (e) => {
+    setIsFinal(e.target.value);
+  };
+  const gerarPDF = (data) => {
     if (servicos.length > 0) {
-      RDO_default(pdfData);
+      RDO_default(data);
     } else {
-      RDO_no_services(pdfData);
+      RDO_no_services(data);
     }
+
+    console.log("PDF Sucesses", data);
   };
 
   return (
@@ -427,7 +417,7 @@ const Forms = () => {
         )}
       />
 
-      <Space style={{marginBlock: "10px"}}>
+      <Space style={{ marginBlock: "10px" }}>
         <Button type="primary" htmlType="submit">
           Gerar PDF
         </Button>
