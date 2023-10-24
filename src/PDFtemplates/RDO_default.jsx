@@ -12,6 +12,7 @@ const RDO_default = ({
   servicos,
   dataDaProducao,
   isFinal,
+  fichaTrafo
 }) => {
   const doc = new jsPDF();
   const logo = new URL( "/src/assets/volt.png", import.meta.url).href
@@ -28,6 +29,7 @@ const RDO_default = ({
   // Cabeçario
   doc.setFontSize(12);
   var finalY = doc.lastAutoTable.finalY || 10;
+
   autoTable(doc, {
     startY: finalY + 20,
     body: [
@@ -89,6 +91,44 @@ const RDO_default = ({
     styles: { overflow: "hidden" },
     margin: { left: 107 },
   });
+
+    // Ficha Transformador
+    doc.setFontSize(12);
+    var finalY = doc.lastAutoTable.finalY || 10;
+    doc.text(`Ficha Transformador ESTF${fichaTrafo.estf} N° Série ${fichaTrafo.nSerie}`, 14, finalY + 25);
+    autoTable(doc, {
+      startY: finalY + 30,
+      columns: [
+        { header: "Bucha", dataKey: "bucha" },
+        { header: "Tensão", dataKey: "tensao" },
+      ],
+      body: [
+        { bucha: "NA", tensao: `${fichaTrafo.NA}` },
+        { bucha: "NB", tensao: `${fichaTrafo.NB}` },
+        { bucha: "NC", tensao: `${fichaTrafo.NC}` },
+       
+      ],
+      showHead: "firstPage",
+      styles: { overflow: "hidden" },
+      margin: { right: 107 },
+    });
+
+     doc.setFontSize(12);
+     autoTable(doc, {
+       startY: finalY + 30,
+       columns: [
+         { header: "Bucha", dataKey: "bucha" },
+         { header: "Tensão", dataKey: "tensao" },
+       ],
+       body: [
+        { bucha: "AB", tensao: `${fichaTrafo.AB}` },
+        { bucha: "AC", tensao: `${fichaTrafo.AC}` },
+        { bucha: "BC", tensao: `${fichaTrafo.BC}` },
+       ],
+       showHead: "firstPage",
+       styles: { overflow: "hidden" },
+       margin: { left: 107 },
+     });
 
   //Serviços
   doc.setFontSize(12);

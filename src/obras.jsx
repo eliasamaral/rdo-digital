@@ -33,6 +33,16 @@ const Obras = () => {
   return (
     <Space direction="vertical" align="center">
       <Title level={4}>Projetos</Title>
+
+      <Card
+        size="small"
+        key={1}
+        title={"PCB"}
+        extra={<Link to={`/pcb`}>Gerar RDO</Link>}
+        style={{
+          width: 300,
+        }}
+      />
       {getProjetos.map((obra) => (
         <Card
           size="small"
