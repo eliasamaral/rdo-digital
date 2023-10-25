@@ -36,7 +36,7 @@ const Obras = () => {
 
       <Card
         size="small"
-        key={1}
+        key={"PCB"}
         title={"PCB"}
         extra={<Link to={`/pcb`}>Gerar RDO</Link>}
         style={{
