@@ -79,7 +79,8 @@ const RDO_no_services = ({
     showHead: "firstPage",
     margin: { right: 107 },
   });
-  // Ficha Transformador
+  if (fichaTrafo !== undefined) {
+    // Ficha Transformador
   doc.setFontSize(12);
   var finalY = doc.lastAutoTable.finalY || 10;
   doc.text(`Ficha Transformador ESTF${fichaTrafo.estf} N° Série ${fichaTrafo.nSerie}`, 14, finalY + 25);
@@ -116,6 +117,8 @@ const RDO_no_services = ({
      styles: { overflow: "hidden" },
      margin: { left: 107 },
    });
+    
+  }
 
   // Observaçoes
   doc.setFontSize(12);
