@@ -11,12 +11,13 @@ const RDO_no_services = ({
   clima,
   dataDaProducao,
   isFinal,
-  fichaTrafo
+  fichaTrafo,
+  diagrama,
 }) => {
   const doc = new jsPDF();
-  const logo = new URL( "/src/assets/volt.png", import.meta.url).href  
-  
-  doc.addImage(logo, "png", 15, 10, )
+  const logo = new URL("/src/assets/volt.png", import.meta.url).href;
+
+  doc.addImage(logo, "png", 15, 10);
 
   doc.setFontSize(16);
   var finalY = doc.lastAutoTable.finalY || 10;
@@ -32,7 +33,7 @@ const RDO_no_services = ({
   autoTable(doc, {
     startY: finalY + 30,
     body: [
-      { funcao: "Projeto:", value: `${projeto}` },
+      { funcao: "Projeto / Diagrama:", value: `${projeto} ${diagrama}` },
       { funcao: "Encarregado:", value: `${encarregado}` },
       { funcao: "Local:", value: `${local}` },
       { funcao: "Data:", value: `${dataDaProducao}` },
@@ -81,48 +82,58 @@ const RDO_no_services = ({
   });
   if (fichaTrafo !== undefined) {
     // Ficha Transformador
-  doc.setFontSize(12);
-  var finalY = doc.lastAutoTable.finalY || 10;
-  doc.text(`Ficha Transformador ESTF${fichaTrafo.estf} N° Série ${fichaTrafo.nSerie}`, 14, finalY + 25);
-  autoTable(doc, {
-    startY: finalY + 30,
-    columns: [
-      { header: "Bucha", dataKey: "bucha" },
-      { header: "Tensão", dataKey: "tensao" },
-    ],
-    body: [
-      { bucha: "NA", tensao: `${fichaTrafo.NA}` },
-      { bucha: "NB", tensao: `${fichaTrafo.NB}` },
-      { bucha: "NC", tensao: `${fichaTrafo.NC}` },
-     
-    ],
-    showHead: "firstPage",
-    styles: { overflow: "hidden" },
-    margin: { right: 107 },
-  });
+    doc.setFontSize(12);
+    var finalY = doc.lastAutoTable.finalY || 10;
+    doc.text(
+      `Transformador instalado: ESTF${fichaTrafo.estf} N° Série ${fichaTrafo.nSerie}`,
+      14,
+      finalY + 25
+    );
+    autoTable(doc, {
+      startY: finalY + 30,
+      columns: [
+        { header: "Bucha", dataKey: "bucha" },
+        { header: "Tensão", dataKey: "tensao" },
+      ],
+      body: [
+        { bucha: "NA", tensao: `${fichaTrafo.NA}` },
+        { bucha: "NB", tensao: `${fichaTrafo.NB}` },
+        { bucha: "NC", tensao: `${fichaTrafo.NC}` },
+      ],
+      showHead: "firstPage",
+      styles: { overflow: "hidden" },
+      margin: { right: 107 },
+    });
 
-   doc.setFontSize(12);
-   autoTable(doc, {
-     startY: finalY + 30,
-     columns: [
-       { header: "Bucha", dataKey: "bucha" },
-       { header: "Tensão", dataKey: "tensao" },
-     ],
-     body: [
-      { bucha: "AB", tensao: `${fichaTrafo.AB}` },
-      { bucha: "AC", tensao: `${fichaTrafo.AC}` },
-      { bucha: "BC", tensao: `${fichaTrafo.BC}` },
-     ],
-     showHead: "firstPage",
-     styles: { overflow: "hidden" },
-     margin: { left: 107 },
-   });
-    
+    doc.setFontSize(12);
+    autoTable(doc, {
+      startY: finalY + 30,
+      columns: [
+        { header: "Bucha", dataKey: "bucha" },
+        { header: "Tensão", dataKey: "tensao" },
+      ],
+      body: [
+        { bucha: "AB", tensao: `${fichaTrafo.AB}` },
+        { bucha: "AC", tensao: `${fichaTrafo.AC}` },
+        { bucha: "BC", tensao: `${fichaTrafo.BC}` },
+      ],
+      showHead: "firstPage",
+      styles: { overflow: "hidden" },
+      margin: { left: 107 },
+    });
   }
 
-  // Observaçoes
   doc.setFontSize(12);
+  var finalY = doc.lastAutoTable.finalY || 5;
+  doc.text(
+    `Transformador desinstalado: ESTF${fichaTrafo.estfsucata} N° Série ${fichaTrafo.nSucataSerie}`,
+    14,
+    finalY + 25
+  );
+
+  // Observaçoes
   autoTable(doc, {
+    startY: finalY + 30,
     columns: [{ header: "Observações", dataKey: "observaçoes" }],
     body: [{ observaçoes: `${observacoes}` }],
     showHead: "firstPage",
@@ -131,8 +142,10 @@ const RDO_no_services = ({
 
   if (isFinal) {
     // Obra Final
+    var finalY = doc.lastAutoTable.finalY || 10;
     doc.setFontSize(12);
     autoTable(doc, {
+      startY: finalY + 25,
       body: [
         [
           {

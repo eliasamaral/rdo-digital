@@ -30,6 +30,10 @@ const servicesPCB = [
   {
     codigo: 71016210,
     descricao: "DESINSTALAR POSTE - < 2500 kg C/ TRAN"
+  },
+  {
+    codigo: 71010077,
+    descricao: "MALHA DE ATERRAMENTO"
   }
 ]
 
