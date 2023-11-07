@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
@@ -18,7 +19,6 @@ import {
   Typography,
   DatePicker,
   Form,
-  Spin,
   Radio,
 } from "antd";
 
@@ -26,6 +26,8 @@ const { TextArea } = Input;
 const { Title, Text } = Typography;
 
 const PCB = () => {
+  const navigate = useNavigate();
+
   const [projeto, setProjeto] = useState("");
   const [diagrama, setDiagrama] = useState("");
   const [local, setLocal] = useState("");
@@ -44,7 +46,9 @@ const PCB = () => {
 
   const [fichaTrafo, setFichaTrafo] = useState({
     estf: "",
+    estfsucata: "",
     nSerie: "",
+    nSucataSerie: "",
     NA: "",
     NB: "",
     NC: "",
@@ -94,12 +98,17 @@ const PCB = () => {
       case "auxiliarQuantidade":
         setMaoDeObra({ ...maoDeObra, auxiliar: value });
         break;
-
       case "estf":
         setFichaTrafo({ ...fichaTrafo, estf: value });
         break;
+      case "estfsucata":
+        setFichaTrafo({ ...fichaTrafo, estfsucata: value });
+        break;
       case "nSerie":
-        setFichaTrafo({ ...fichaTrafo, nSerie: value  });
+        setFichaTrafo({ ...fichaTrafo, nSerie: value });
+        break;
+      case "nSucataSerie":
+        setFichaTrafo({ ...fichaTrafo, nSucataSerie: value });
         break;
       case "NA":
         setFichaTrafo({ ...fichaTrafo, NA: value + "V" });
@@ -173,6 +182,7 @@ const PCB = () => {
       fichaTrafo,
     };
     gerarPDF(data);
+    navigate("/");
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -184,11 +194,7 @@ const PCB = () => {
     setIsFinal(e.target.value);
   };
   const gerarPDF = (data) => {
-    if(servicos.length > 0) {
-      RDO_default(data);
-    } else {
-      RDO_no_services(data);
-    }
+    RDO_default(data);
 
     console.log("PDF Sucesses", data);
   };
@@ -232,7 +238,16 @@ const PCB = () => {
         <Title type="secondary" level={5} style={{ margin: "0px" }}>
           Projeto
         </Title>
-        <Form.Item style={{ margin: "0px" }}>
+        <Form.Item
+          name="projeto"
+          rules={[
+            {
+              required: true,
+              message: "Obrigatorio!",
+            },
+          ]}
+          style={{ margin: "0px" }}
+        >
           <Input
             name="projeto"
             value={projeto}
@@ -268,7 +283,16 @@ const PCB = () => {
         <Title type="secondary" level={5} style={{ margin: "0px" }}>
           Local
         </Title>
-        <Form.Item style={{ margin: "0px" }}>
+        <Form.Item
+          name="local"
+          rules={[
+            {
+              required: true,
+              message: "Obrigatorio!",
+            },
+          ]}
+          style={{ margin: "0px" }}
+        >
           <Input
             name="local"
             value={local}
@@ -368,57 +392,84 @@ const PCB = () => {
           />
         </Form.Item>
       </Space>
-
       <Divider orientation="left">Ficha Transformador</Divider>
 
-      <Space>
-        <Space direction="vertical">
-          <Input
-            style={{ marginBottom: "20px" }}
-            addonBefore="ESTF"
-            name="estf"
-            type="number"
-            onChange={(e) => handleInputChange(e)}
-          />
-          <Input
-            addonBefore="X0 a X1"
-            name="NA"
-            onChange={(e) => handleInputChange(e)}
-          />
-          <Input
-            addonBefore="X0 a X2"
-            name="NB"
-            onChange={(e) => handleInputChange(e)}
-          />
-          <Input
-            addonBefore="X0 a X3"
-            name="NC"
-            onChange={(e) => handleInputChange(e)}
-          />
+      <Space direction="vertical">
+        <Text style={{ fontSize: "13px", color: "#ff0000cc", fontWeight: 900 }}>
+          EQUIPAMENTO NOVO
+        </Text>
+        <Space>
+          <Space direction="vertical">
+            <Input
+              style={{ marginBottom: "20px" }}
+              addonBefore="ESTF"
+              name="estf"
+              type="number"
+              onChange={(e) => handleInputChange(e)}
+            />
+            <Input
+              addonBefore="X0 a X1"
+              name="NA"
+              onChange={(e) => handleInputChange(e)}
+            />
+            <Input
+              addonBefore="X0 a X2"
+              name="NB"
+              onChange={(e) => handleInputChange(e)}
+            />
+            <Input
+              addonBefore="X0 a X3"
+              name="NC"
+              onChange={(e) => handleInputChange(e)}
+            />
+          </Space>
+          <Space direction="vertical">
+            <Input
+              style={{ marginBottom: "20px" }}
+              addonBefore="N° de série"
+              name="nSerie"
+              type="number"
+              onChange={(e) => handleInputChange(e)}
+            />
+            <Input
+              addonBefore="X1 a X2"
+              name="AB"
+              onChange={(e) => handleInputChange(e)}
+            />
+            <Input
+              addonBefore="X1 a X3"
+              name="AC"
+              onChange={(e) => handleInputChange(e)}
+            />
+            <Input
+              addonBefore="X2 a X3"
+              name="BC"
+              onChange={(e) => handleInputChange(e)}
+            />
+          </Space>
         </Space>
-        <Space direction="vertical">
-          <Input
-            style={{ marginBottom: "20px" }}
-            addonBefore="N° de série"
-            name="nSerie"
-            type="number"
-            onChange={(e) => handleInputChange(e)}
-          />
-          <Input
-            addonBefore="X1 a X2"
-            name="AB"
-            onChange={(e) => handleInputChange(e)}
-          />
-          <Input
-            addonBefore="X1 a X3"
-            name="AC"
-            onChange={(e) => handleInputChange(e)}
-          />
-          <Input
-            addonBefore="X2 a X3"
-            name="BC"
-            onChange={(e) => handleInputChange(e)}
-          />
+        <Space direction="vertical" style={{ marginTop: "10px" }}>
+          <Text
+            style={{ fontSize: "13px", color: "#ff0000cc", fontWeight: 900 }}
+          >
+            EQUIPAMENTO VELHO
+          </Text>
+          <Space>
+            <Input
+              style={{ marginBottom: "20px" }}
+              addonBefore="ESTF"
+              name="estfsucata"
+              type="number"
+              onChange={(e) => handleInputChange(e)}
+            />
+            <Input
+              style={{ marginBottom: "20px" }}
+              addonBefore="N° de série"
+              name="nSerieSucata"
+              type="number"
+              onChange={(e) => handleInputChange(e)}
+            />
+          </Space>
         </Space>
       </Space>
 
@@ -478,7 +529,7 @@ const PCB = () => {
         dataSource={servicesPCB}
         renderItem={(item, index) => (
           <List.Item>
-            <List.Item.Meta title={item.codigo} description={item.descricao} />
+            <List.Item.Meta title={item.descricao} description={item.codigo} />
             <InputNumber
               controls={false}
               step="0.000"

@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
-import { Card, Space, Spin, Typography } from "antd";
+import { Card, Spin, Typography } from "antd";
 import { GET_PROJETOS } from "./Schemas";
 
 const { Title } = Typography;
@@ -15,7 +15,6 @@ const Obras = () => {
         style={{
           display: "flex",
           height: "100vh",
-          justifyContent: "center",
           alignItems: "center",
         }}
       >
@@ -24,25 +23,47 @@ const Obras = () => {
     );
   }
 
-  if (error) {
-    console.log(error);
-  }
+  if (error) return `Submission error! ${error.message}`;
 
   const { getProjetos } = data;
 
   return (
-    <Space direction="vertical" align="center">
+    <div
+      style={{
+        display: "flex ",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+      }}
+    >
       <Title level={4}>Projetos</Title>
 
-      <Card
-        size="small"
-        key={"PCB"}
-        title={"PCB"}
-        extra={<Link to={`/pcb`}>Gerar RDO</Link>}
+      <div
         style={{
-          width: 300,
+          display: "flex",
+          width: "100%",
+          gap: "10px",
         }}
-      />
+      >
+        <Card
+          size="small"
+          key={"PCB"}
+          title={"PCB"}
+          extra={<Link to={`/pcb`}>Gerar RDO</Link>}
+          style={{
+            width: "100%",
+          }}
+        />
+        <Card
+          size="small"
+          key={"generica"}
+          title={"Genérica"}
+          extra={<Link to={`/generica`}>Gerar RDO</Link>}
+          style={{
+            width: "100%",
+          }}
+        />
+      </div>
       {getProjetos.map((obra) => (
         <Card
           size="small"
@@ -50,13 +71,14 @@ const Obras = () => {
           title={obra.local}
           extra={<Link to={`/forms/${obra.projeto}`}>Gerar RDO</Link>}
           style={{
-            width: 300,
+            width: "100%",
+            margin: "10px",
           }}
         >
           <p>{obra.projeto}</p>
         </Card>
       ))}
-    </Space>
+    </div>
   );
 };
 

@@ -13,6 +13,7 @@ const RDO_default = ({
   dataDaProducao,
   isFinal,
   fichaTrafo,
+  diagrama,
 }) => {
   const doc = new jsPDF();
   const logo = new URL("/src/assets/volt.png", import.meta.url).href;
@@ -33,7 +34,7 @@ const RDO_default = ({
   autoTable(doc, {
     startY: finalY + 20,
     body: [
-      { funcao: "Projeto:", value: `${projeto}` },
+      { funcao: "Projeto / Diagrama:", value: `${projeto} ${diagrama}` },
       { funcao: "Encarregado:", value: `${encarregado}` },
       { funcao: "Local:", value: `${local}` },
       { funcao: "Data:", value: `${dataDaProducao}` },
@@ -92,52 +93,71 @@ const RDO_default = ({
     margin: { left: 107 },
   });
 
+  //TRAFO NOVO
+  var finalY = doc.lastAutoTable.finalY || 10;
+  doc.text("Equipamento instalado", 14, finalY + 25);
+  doc.autoTable({
+    startY: finalY + 30,
+    head: [
+      [
+        {
+          content: "Equipamento instalado",
+        },
+        {
+          content: "Tensões",
+          colSpan: 6,
+        },
+      ],
+      [
+        {
+          content: `ESTF ${fichaTrafo.estf}`,
+        },
+        "NA",
+        "NB",
+        "NC",
+        "AB",
+        "AC",
+        "BC",
+      ],
+    ],
+    body: [
+      [
+        {
+          content: `N° série ${fichaTrafo.nSerie}`,
+          styles: {
+            fontStyle: "bold",
+            textColor: "#fff",
+            fillColor: [84, 109, 156],
+          },
+        },
+        fichaTrafo.NA,
+        fichaTrafo.NB,
+        fichaTrafo.NC,
+        fichaTrafo.AB,
+        fichaTrafo.AC,
+        fichaTrafo.BC,
+      ],
+    ],
+  });
 
-  if ((fichaTrafo !== undefined)) {
-    // Ficha Transformador
-    doc.setFontSize(12);
-    var finalY = doc.lastAutoTable.finalY || 10;
-    doc.text(
-      `Ficha Transformador ESTF${fichaTrafo.estf} N° Série ${fichaTrafo.nSerie}`,
-      14,
-      finalY + 25
-    );
-    autoTable(doc, {
-      startY: finalY + 30,
-      columns: [
-        { header: "Bucha", dataKey: "bucha" },
-        { header: "Tensão", dataKey: "tensao" },
-      ],
-      body: [
-        { bucha: "NA", tensao: `${fichaTrafo.NA}` },
-        { bucha: "NB", tensao: `${fichaTrafo.NB}` },
-        { bucha: "NC", tensao: `${fichaTrafo.NC}` },
-      ],
-      showHead: "firstPage",
-      styles: { overflow: "hidden" },
-      margin: { right: 107 },
-    });
-
-    doc.setFontSize(12);
-    autoTable(doc, {
-      startY: finalY + 30,
-      columns: [
-        { header: "Bucha", dataKey: "bucha" },
-        { header: "Tensão", dataKey: "tensao" },
-      ],
-      body: [
-        { bucha: "AB", tensao: `${fichaTrafo.AB}` },
-        { bucha: "AC", tensao: `${fichaTrafo.AC}` },
-        { bucha: "BC", tensao: `${fichaTrafo.BC}` },
-      ],
-      showHead: "firstPage",
-      styles: { overflow: "hidden" },
-      margin: { left: 107 },
-    });
-  }
+  var finalY = doc.lastAutoTable.finalY || 10;
+  doc.text("Equipamento desistalado", 14, finalY + 25);
+  autoTable(doc, {
+    startY: finalY + 30,
+    body: [
+      {
+        content: "Equipamento desistalado",
+      },
+      {
+        content: `ESTF${fichaTrafo.estfsucata}`,
+      },
+      {
+        content: `N° série${fichaTrafo.nSucataSerie}`,
+      },
+    ],
+  });
 
   //Serviços
-  doc.setFontSize(12);
   var finalY = doc.lastAutoTable.finalY || 10;
   doc.text("Serviços executados", 14, finalY + 25);
   autoTable(doc, {
@@ -152,8 +172,10 @@ const RDO_default = ({
 
   if (isFinal) {
     // Obra Final
+    var finalY = doc.lastAutoTable.finalY || 10;
     doc.setFontSize(12);
     autoTable(doc, {
+      startY: finalY + 25,
       body: [
         [
           {
