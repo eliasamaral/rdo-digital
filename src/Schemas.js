@@ -25,11 +25,11 @@ export const GET_PROJETO = gql`
 `;
 
 export const CODIGO_BY_TYPE = gql`
-  query ($type: String!) {
-    codigoByType(type: $type) {
+  query ($tipo: String!) {
+    codigoByType(tipo: $tipo) {
       _id
-      description
-      code
+      descricao
+      codigo
     }
   }
 `;

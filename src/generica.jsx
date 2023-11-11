@@ -5,10 +5,9 @@ import locale from "antd/es/date-picker/locale/pt_BR";
 import { useNavigate } from "react-router-dom";
 
 import { useQuery } from "@apollo/client";
-import { GET_PROJETO } from "./Schemas";
+import { CODIGO_BY_TYPE } from "./Schemas";
 
 import RDO_default from "./PDFtemplates/RDO_default";
-import RDO_no_services from "./PDFtemplates/RDO_no_services";
 
 import {
   Input,
@@ -28,8 +27,8 @@ const { TextArea } = Input;
 const { Title, Text } = Typography;
 
 const Generica = () => {
-  const { data, loading } = useQuery(GET_PROJETO, {
-    variables: { projeto: parseFloat(1) },
+  const { data, loading } = useQuery(CODIGO_BY_TYPE, {
+    variables: { tipo: "SRV" },
   });
 
   const navigate = useNavigate();
@@ -82,9 +81,12 @@ const Generica = () => {
       </div>
     );
   }
-  const { getProjeto } = data;
 
-  const servicosObra = getProjeto.RDODigital.map((item) => ({ ...item }));
+  const { codigoByType } = data;
+
+  const servicosObra = codigoByType.map((item) => ({ ...item }));
+
+  
 
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -548,7 +550,7 @@ const Generica = () => {
       <Divider orientation="left">Serviços executados</Divider>
       <List
         itemLayout="horizontal"
-        dataSource={getProjeto.RDODigital}
+        dataSource={codigoByType}
         renderItem={(item, index) => (
           <List.Item>
             <List.Item.Meta title={item.descricao} description={item.codigo} />
