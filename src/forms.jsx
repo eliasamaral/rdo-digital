@@ -8,7 +8,6 @@ import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_RDO, GET_PROJETO } from "./Schemas";
 
 import RDO_default from "./PDFtemplates/RDO_default";
-import RDO_no_services from "./PDFtemplates/RDO_no_services";
 
 import {
   Input,
@@ -77,6 +76,7 @@ const Forms = () => {
       <div
         style={{
           display: "flex",
+          justifyContent: "center",
           height: "100vh",
           alignItems: "center",
         }}
@@ -200,7 +200,6 @@ const Forms = () => {
       isFinal,
       fichaTrafo,
     };
-
     createRDO({
       variables: data,
     });
@@ -458,7 +457,7 @@ const Forms = () => {
             <Input
               style={{ marginBottom: "20px" }}
               addonBefore="N° de série"
-              name="nSerieSucata"
+              name="nSucataSerie"
               type="number"
               onChange={(e) => handleInputChange(e)}
             />
@@ -507,10 +506,10 @@ const Forms = () => {
         </Space>
       </Space>
 
-      <Divider orientation="left">Observações</Divider>
+      <Divider orientation="left">Relatos de desvios e/ou retrabalhos</Divider>
 
       <TextArea
-        placeholder="Observações"
+        placeholder="..."
         rows={4}
         name="observacoes"
         onChange={(e) => handleInputChange(e)}

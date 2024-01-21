@@ -86,8 +86,6 @@ const Generica = () => {
 
   const servicosObra = codigoByType.map((item) => ({ ...item }));
 
-  
-
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
 
@@ -489,7 +487,7 @@ const Generica = () => {
             <Input
               style={{ marginBottom: "20px" }}
               addonBefore="N° de série"
-              name="nSerieSucata"
+              name="nSucataSerie"
               type="number"
               onChange={(e) => handleInputChange(e)}
             />
@@ -538,10 +536,10 @@ const Generica = () => {
         </Space>
       </Space>
 
-      <Divider orientation="left">Observações</Divider>
+      <Divider orientation="left">Relatos de desvios e/ou retrabalhos</Divider>
 
       <TextArea
-        placeholder="Observações"
+        placeholder="..."
         rows={4}
         name="observacoes"
         onChange={(e) => handleInputChange(e)}

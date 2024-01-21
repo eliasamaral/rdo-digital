@@ -44,6 +44,7 @@ export const CREATE_RDO = gql`
     $clima: ClimaInput
     $maoDeObra: maoDeObraInput
     $observacoes: String
+    $isFinal: Boolean
     $servicos: [SRVInput]
   ) {
     createRDO(
@@ -56,6 +57,7 @@ export const CREATE_RDO = gql`
         clima: $clima
         maoDeObra: $maoDeObra
         observacoes: $observacoes
+        isFinal: $isFinal
         servicos: $servicos
       }
     ) {
