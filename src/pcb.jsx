@@ -5,7 +5,6 @@ import "dayjs/locale/pt-br";
 import locale from "antd/es/date-picker/locale/pt_BR";
 
 import RDO_default from "./PDFtemplates/RDO_default";
-import RDO_no_services from "./PDFtemplates/RDO_no_services";
 
 import servicesPCB from "./servicesPCB";
 
@@ -20,6 +19,7 @@ import {
   DatePicker,
   Form,
   Radio,
+  Spin
 } from "antd";
 
 const { TextArea } = Input;
@@ -198,6 +198,8 @@ const PCB = () => {
 
     console.log("PDF Sucesses", data);
   };
+
+
 
   return (
     <Form
@@ -465,7 +467,7 @@ const PCB = () => {
             <Input
               style={{ marginBottom: "20px" }}
               addonBefore="N° de série"
-              name="nSerieSucata"
+              name="nSucataSerie"
               type="number"
               onChange={(e) => handleInputChange(e)}
             />
@@ -514,10 +516,10 @@ const PCB = () => {
         </Space>
       </Space>
 
-      <Divider orientation="left">Observações</Divider>
+      <Divider orientation="left">Relatos de desvios e/ou retrabalhos</Divider>
 
       <TextArea
-        placeholder="Observações"
+        placeholder="..."
         rows={4}
         name="observacoes"
         onChange={(e) => handleInputChange(e)}

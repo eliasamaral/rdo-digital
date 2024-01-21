@@ -22,7 +22,7 @@ const RDO_default = ({
 
   doc.setFontSize(16);
   var finalY = doc.lastAutoTable.finalY || 10;
-  doc.text("Relatório de Obras", 80, finalY + 8);
+  doc.text("Relatório diario de Obras", 80, finalY + 8);
 
   doc.setFontSize(8);
   doc.text(`Gerado em ${dataAtual}`, 170, 10);
@@ -42,16 +42,20 @@ const RDO_default = ({
     showHead: "firstPage",
     styles: { overflow: "hidden" },
     margin: { right: 107 },
+    theme: "striped",
   });
   // Observaçoes
   doc.setFontSize(12);
   autoTable(doc, {
     startY: finalY + 20,
-    columns: [{ header: "Observações", dataKey: "observaçoes" }],
+    columns: [
+      { header: "Relatos de desvios e/ou retrabalhos", dataKey: "observaçoes" },
+    ],
     body: [{ observaçoes: `${observacoes}` }],
     showHead: "firstPage",
     margin: { left: 107 },
     columnStyles: { text: { cellWidth: "auto" } },
+    theme: "striped",
   });
 
   // Mão de obra
@@ -73,6 +77,7 @@ const RDO_default = ({
     showHead: "firstPage",
     styles: { overflow: "hidden" },
     margin: { right: 107 },
+    theme: "striped",
   });
 
   // Clima
@@ -91,45 +96,52 @@ const RDO_default = ({
     showHead: "firstPage",
     styles: { overflow: "hidden" },
     margin: { left: 107 },
+    theme: "striped",
   });
 
-  //TRAFO NOVO
+  //Equipamentos
   var finalY = doc.lastAutoTable.finalY || 10;
-  doc.text("Equipamento instalado", 14, finalY + 25);
-  doc.autoTable({
+  doc.text("Equipamentos", 14, finalY + 25);
+  autoTable(doc, {
     startY: finalY + 30,
+    theme: "striped",
+    columns: [
+      { header: "Identificador", dataKey: "tipo" },
+      { header: "Instalado", dataKey: "instalado" },
+      { header: "Removido", dataKey: "removido" },
+    ],
+    body: [
+      {
+        tipo: "ESTF",
+        instalado: fichaTrafo.estf,
+        removido: fichaTrafo.estfsucata,
+      },
+      {
+        tipo: "Série",
+        instalado: fichaTrafo.nSerie,
+        removido: fichaTrafo.nSucataSerie,
+      },
+    ],
+  });
+
+  //Equipamento
+  var finalY = doc.lastAutoTable.finalY || 10;
+  doc.autoTable({
+    theme: "striped",
+    startY: finalY + 10,
     head: [
       [
         {
-          content: "Equipamento instalado",
-        },
-        {
           content: "Tensões",
           colSpan: 6,
+          styles: { halign: "center" },
         },
-      ],
-      [
-        {
-          content: `ESTF ${fichaTrafo.estf}`,
-        },
-        "NA",
-        "NB",
-        "NC",
-        "AB",
-        "AC",
-        "BC",
       ],
     ],
     body: [
+      ["NA", "NB", "NC", "AB", "AC", "BC"],
+
       [
-        {
-          content: `N° série ${fichaTrafo.nSerie}`,
-          styles: {
-            fontStyle: "bold",
-            textColor: "#fff",
-            fillColor: [84, 109, 156],
-          },
-        },
         fichaTrafo.NA,
         fichaTrafo.NB,
         fichaTrafo.NC,
@@ -140,28 +152,12 @@ const RDO_default = ({
     ],
   });
 
-  var finalY = doc.lastAutoTable.finalY || 10;
-  doc.text("Equipamento desistalado", 14, finalY + 25);
-  autoTable(doc, {
-    startY: finalY + 30,
-    body: [
-      {
-        content: "Equipamento desistalado",
-      },
-      {
-        content: `ESTF${fichaTrafo.estfsucata}`,
-      },
-      {
-        content: `N° série${fichaTrafo.nSucataSerie}`,
-      },
-    ],
-  });
-
   //Serviços
   var finalY = doc.lastAutoTable.finalY || 10;
   doc.text("Serviços executados", 14, finalY + 25);
   autoTable(doc, {
     startY: finalY + 30,
+    theme: "striped",
     columns: [
       { header: "Código", dataKey: "codigo" },
       { header: "Descrição", dataKey: "descricao" },
