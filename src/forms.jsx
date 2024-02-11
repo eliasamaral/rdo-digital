@@ -33,6 +33,7 @@ const Forms = () => {
   const { data, loading, error } = useQuery(GET_PROJETO, {
     variables: { projeto: parseFloat(id) },
   });
+
   const [createRDO, { data: createRDOdata }] = useMutation(CREATE_RDO);
 
   const [encarregado, setEncarregado] = useState("");
@@ -88,9 +89,9 @@ const Forms = () => {
 
   if (error) return `Submission error! ${error.message}`;
 
-  const { projeto, diagrama, local, RDODigital } = data.getProjeto;
+  const { projeto, diagrama, local, srv } = data.getProjeto;
 
-  const servicosObra = RDODigital.map((item) => ({ ...item }));
+  const servicosObra = srv.map((item) => ({ ...item }));
 
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -518,7 +519,7 @@ const Forms = () => {
       <Divider orientation="left">Serviços executados</Divider>
       <List
         itemLayout="horizontal"
-        dataSource={RDODigital}
+        dataSource={srv}
         renderItem={(item, index) => (
           <List.Item>
             <List.Item.Meta title={item.codigo} description={item.descricao} />

@@ -16,9 +16,10 @@ export const GET_PROJETO = gql`
       projeto
       local
       diagrama
-      RDODigital {
+      srv {
         codigo
         descricao
+        qntOrcada
       }
     }
   }
