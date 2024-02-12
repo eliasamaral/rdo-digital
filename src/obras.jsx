@@ -1,7 +1,8 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
-import { Card, Spin, Typography } from "antd";
+import { Card, Spin, Typography, Button } from "antd";
+import { EnvironmentFilled } from "@ant-design/icons";
 import { GET_PROJETOS } from "./Schemas";
 
 const { Title } = Typography;
@@ -27,6 +28,13 @@ const Obras = () => {
   if (error) return `Submission error! ${error.message}`;
 
   const { getProjetos } = data;
+
+
+  function iniciarRota(lat, long) {
+    if(!lat && !long) return
+    const url = `https://www.google.com/maps?q=${lat},${long}`;
+    window.open(url, "_blank");
+  }
 
   return (
     <div
@@ -66,11 +74,22 @@ const Obras = () => {
         />
       </div>
       {getProjetos.map((obra) => (
+
         <Card
           size="small"
-          key={obra.projeto}
+          key={obra.id}
           title={obra.local}
-          extra={<Link to={`/forms/${obra.projeto}`}>Gerar RDO</Link>}
+          extra={
+            <div>
+              <Button
+                type="link"
+                onClick={() =>  iniciarRota(obra.coord.x, obra.coord.y)}
+              >
+                <EnvironmentFilled />
+              </Button>
+              <Link to={`/forms/${obra.projeto}`}>Gerar RDO</Link>
+            </div>
+          }
           style={{
             width: "100%",
             margin: "10px",

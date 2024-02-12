@@ -6,6 +6,10 @@ export const GET_PROJETOS = gql`
       id
       projeto
       local
+      coord{
+        x
+        y
+      }
     }
   }
 `;
@@ -13,6 +17,7 @@ export const GET_PROJETOS = gql`
 export const GET_PROJETO = gql`
   query ($projeto: Float!) {
     getProjeto(projeto: $projeto) {
+      id
       projeto
       local
       diagrama
