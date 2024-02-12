@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import locale from "antd/es/date-picker/locale/pt_BR";
+import { useNavigate } from "react-router-dom";
 
-import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_RDO, GET_PROJETO } from "./Schemas";
+import { useQuery } from "@apollo/client";
+import { CODIGO_BY_TYPE } from "./Schemas";
 
 import RDO_default from "./PDFtemplates/RDO_default";
 
@@ -26,16 +26,16 @@ import {
 const { TextArea } = Input;
 const { Title, Text } = Typography;
 
-const Forms = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-
-  const { data, loading, error } = useQuery(GET_PROJETO, {
-    variables: { projeto: parseFloat(id) },
+const Generica = () => {
+  const { data, loading } = useQuery(CODIGO_BY_TYPE, {
+    variables: { tipo: "SRV" },
   });
 
-  const [createRDO, { data: createRDOdata }] = useMutation(CREATE_RDO);
+  const navigate = useNavigate();
 
+  const [projeto, setProjeto] = useState("");
+  const [diagrama, setDiagrama] = useState("");
+  const [local, setLocal] = useState("");
   const [encarregado, setEncarregado] = useState("");
   const [dataDaProducao, setdataDaProducao] = useState("");
   const [clima, setClima] = useState({
@@ -48,11 +48,6 @@ const Forms = () => {
     eletricista: 3,
     auxiliar: 3,
   });
-
-  const [observacoes, setObservacoes] = useState("Não a observações.");
-  const [servicos, setServicos] = useState([]);
-  const [quantidadesServicos, setQuantidadesServicos] = useState({});
-  const [isFinal, setIsFinal] = useState();
 
   const [fichaTrafo, setFichaTrafo] = useState({
     estf: "",
@@ -67,18 +62,18 @@ const Forms = () => {
     BC: "",
   });
 
-  if (createRDOdata) {
-    console.log("Success", createRDOdata);
-    navigate("/");
-  }
+  const [observacoes, setObservacoes] = useState("Não a observações.");
+  const [servicos, setServicos] = useState([]);
+  const [quantidadesServicos, setQuantidadesServicos] = useState({});
+  const [isFinal, setIsFinal] = useState();
 
   if (loading) {
     return (
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
           height: "100vh",
+          justifyContent: "center",
           alignItems: "center",
         }}
       >
@@ -87,16 +82,23 @@ const Forms = () => {
     );
   }
 
-  if (error) return `Submission error! ${error.message}`;
+  const { codigoByType } = data;
 
-  const { projeto, diagrama, local, srv } = data.getProjeto;
-
-  const servicosObra = srv.map((item) => ({ ...item }));
+  const servicosObra = codigoByType.map((item) => ({ ...item }));
 
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
 
     switch (name) {
+      case "projeto":
+        setProjeto(value);
+        break;
+      case "diagrama":
+        setDiagrama(value);
+        break;
+      case "local":
+        setLocal(value);
+        break;
       case "encarregado":
         setEncarregado(value);
         break;
@@ -201,10 +203,8 @@ const Forms = () => {
       isFinal,
       fichaTrafo,
     };
-    createRDO({
-      variables: data,
-    });
     gerarPDF(data);
+    navigate("/");
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -240,7 +240,7 @@ const Forms = () => {
         }}
       >
         <Title level={4} style={{ margin: "0px" }}>
-          Relatório de obras
+          Relatório de obras genérico
         </Title>
 
         <Button type="primary" htmlType="submit">
@@ -260,9 +260,22 @@ const Forms = () => {
         <Title type="secondary" level={5} style={{ margin: "0px" }}>
           Projeto
         </Title>
-        <Title level={5} style={{ margin: "0px" }}>
-          {projeto}
-        </Title>
+        <Form.Item
+          name="projeto"
+          rules={[
+            {
+              required: true,
+              message: "Obrigatorio!",
+            },
+          ]}
+          style={{ margin: "0px" }}
+        >
+          <Input
+            name="projeto"
+            value={projeto}
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Form.Item>
       </Space>
       <Space
         style={{
@@ -271,12 +284,16 @@ const Forms = () => {
           justifyContent: "space-between",
         }}
       >
-        <Title type="secondary" level={5} style={{ margin: "0px" }}>
+        <Title type="secondary" level={5} style={{ marginBlock: "10px" }}>
           Diagrama
         </Title>
-        <Title level={5} style={{ margin: "0px" }}>
-          {diagrama}
-        </Title>
+        <Form.Item style={{ margin: "0px" }}>
+          <Input
+            name="diagrama"
+            value={diagrama}
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Form.Item>
       </Space>
       <Space
         style={{
@@ -288,9 +305,22 @@ const Forms = () => {
         <Title type="secondary" level={5} style={{ margin: "0px" }}>
           Local
         </Title>
-        <Title level={5} style={{ margin: "0px" }}>
-          {local}
-        </Title>
+        <Form.Item
+          name="local"
+          rules={[
+            {
+              required: true,
+              message: "Obrigatorio!",
+            },
+          ]}
+          style={{ margin: "0px" }}
+        >
+          <Input
+            name="local"
+            value={local}
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Form.Item>
       </Space>
       <Divider orientation="left">Informante</Divider>
 
@@ -384,7 +414,6 @@ const Forms = () => {
           />
         </Form.Item>
       </Space>
-
       <Divider orientation="left">Ficha Transformador</Divider>
 
       <Space direction="vertical">
@@ -519,10 +548,10 @@ const Forms = () => {
       <Divider orientation="left">Serviços executados</Divider>
       <List
         itemLayout="horizontal"
-        dataSource={srv}
+        dataSource={codigoByType}
         renderItem={(item, index) => (
           <List.Item>
-            <List.Item.Meta title={item.codigo} description={item.descricao} />
+            <List.Item.Meta title={item.descricao} description={item.codigo} />
             <InputNumber
               controls={false}
               step="0.000"
@@ -548,4 +577,4 @@ const Forms = () => {
   );
 };
 
-export default Forms;
+export default Generica;

@@ -16,20 +16,21 @@ export const GET_PROJETO = gql`
       projeto
       local
       diagrama
-      RDODigital {
+      srv {
         codigo
         descricao
+        qntOrcada
       }
     }
   }
 `;
 
 export const CODIGO_BY_TYPE = gql`
-  query ($type: String!) {
-    codigoByType(type: $type) {
+  query ($tipo: String!) {
+    codigoByType(tipo: $tipo) {
       _id
-      description
-      code
+      descricao
+      codigo
     }
   }
 `;
@@ -38,37 +39,31 @@ export const CREATE_RDO = gql`
   mutation (
     $projeto: Float
     $diagrama: Float
-    $local: String
-    $auxiliarQuantidade: Int
-    $eletricistaQuantidade: Int
-    $encarregadoQuantidade: Int
-    $motoristaQuantidade: Int
-    $climaManha: String
-    $climaTarde: String
-    $dataDaProducao: String
     $encarregado: String
+    $local: String
+    $dataDaProducao: String
+    $clima: ClimaInput
+    $maoDeObra: maoDeObraInput
     $observacoes: String
+    $isFinal: Boolean
     $servicos: [SRVInput]
   ) {
     createRDO(
       data: {
         projeto: $projeto
-        encarregado: $encarregado
         diagrama: $diagrama
+        encarregado: $encarregado
         local: $local
-        encarregadoQuantidade: $encarregadoQuantidade
         dataDaProducao: $dataDaProducao
-        eletricistaQuantidade: $eletricistaQuantidade
-        motoristaQuantidade: $motoristaQuantidade
-        auxiliarQuantidade: $auxiliarQuantidade
-        climaManha: $climaManha
-        climaTarde: $climaTarde
+        clima: $clima
+        maoDeObra: $maoDeObra
         observacoes: $observacoes
+        isFinal: $isFinal
         servicos: $servicos
       }
     ) {
       _id
-      encarregado
+      
     }
   }
 `;

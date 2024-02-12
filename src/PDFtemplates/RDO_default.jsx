@@ -12,15 +12,17 @@ const RDO_default = ({
   servicos,
   dataDaProducao,
   isFinal,
+  fichaTrafo,
+  diagrama,
 }) => {
   const doc = new jsPDF();
-  const logo = new URL( "/src/assets/volt.png", import.meta.url).href
-  
-  doc.addImage(logo, "png", 15, 10, )
+  const logo = new URL("/src/assets/volt.png", import.meta.url).href;
+
+  doc.addImage(logo, "png", 15, 10);
 
   doc.setFontSize(16);
   var finalY = doc.lastAutoTable.finalY || 10;
-  doc.text("Relatório de Obras", 80, finalY + 8);
+  doc.text("Relatório diario de Obras", 80, finalY + 8);
 
   doc.setFontSize(8);
   doc.text(`Gerado em ${dataAtual}`, 170, 10);
@@ -28,10 +30,11 @@ const RDO_default = ({
   // Cabeçario
   doc.setFontSize(12);
   var finalY = doc.lastAutoTable.finalY || 10;
+
   autoTable(doc, {
     startY: finalY + 20,
     body: [
-      { funcao: "Projeto:", value: `${projeto}` },
+      { funcao: "Projeto / Diagrama:", value: `${projeto} ${diagrama}` },
       { funcao: "Encarregado:", value: `${encarregado}` },
       { funcao: "Local:", value: `${local}` },
       { funcao: "Data:", value: `${dataDaProducao}` },
@@ -39,16 +42,20 @@ const RDO_default = ({
     showHead: "firstPage",
     styles: { overflow: "hidden" },
     margin: { right: 107 },
+    theme: "striped",
   });
   // Observaçoes
   doc.setFontSize(12);
   autoTable(doc, {
     startY: finalY + 20,
-    columns: [{ header: "Observações", dataKey: "observaçoes" }],
+    columns: [
+      { header: "Relatos de desvios e/ou retrabalhos", dataKey: "observaçoes" },
+    ],
     body: [{ observaçoes: `${observacoes}` }],
     showHead: "firstPage",
     margin: { left: 107 },
     columnStyles: { text: { cellWidth: "auto" } },
+    theme: "striped",
   });
 
   // Mão de obra
@@ -70,6 +77,7 @@ const RDO_default = ({
     showHead: "firstPage",
     styles: { overflow: "hidden" },
     margin: { right: 107 },
+    theme: "striped",
   });
 
   // Clima
@@ -88,14 +96,68 @@ const RDO_default = ({
     showHead: "firstPage",
     styles: { overflow: "hidden" },
     margin: { left: 107 },
+    theme: "striped",
+  });
+
+  //Equipamentos
+  var finalY = doc.lastAutoTable.finalY || 10;
+  doc.text("Equipamentos", 14, finalY + 25);
+  autoTable(doc, {
+    startY: finalY + 30,
+    theme: "striped",
+    columns: [
+      { header: "Identificador", dataKey: "tipo" },
+      { header: "Instalado", dataKey: "instalado" },
+      { header: "Removido", dataKey: "removido" },
+    ],
+    body: [
+      {
+        tipo: "ESTF",
+        instalado: fichaTrafo.estf,
+        removido: fichaTrafo.estfsucata,
+      },
+      {
+        tipo: "Série",
+        instalado: fichaTrafo.nSerie,
+        removido: fichaTrafo.nSucataSerie,
+      },
+    ],
+  });
+
+  //Equipamento
+  var finalY = doc.lastAutoTable.finalY || 10;
+  doc.autoTable({
+    theme: "striped",
+    startY: finalY + 10,
+    head: [
+      [
+        {
+          content: "Tensões",
+          colSpan: 6,
+          styles: { halign: "center" },
+        },
+      ],
+    ],
+    body: [
+      ["NA", "NB", "NC", "AB", "AC", "BC"],
+
+      [
+        fichaTrafo.NA,
+        fichaTrafo.NB,
+        fichaTrafo.NC,
+        fichaTrafo.AB,
+        fichaTrafo.AC,
+        fichaTrafo.BC,
+      ],
+    ],
   });
 
   //Serviços
-  doc.setFontSize(12);
   var finalY = doc.lastAutoTable.finalY || 10;
   doc.text("Serviços executados", 14, finalY + 25);
   autoTable(doc, {
     startY: finalY + 30,
+    theme: "striped",
     columns: [
       { header: "Código", dataKey: "codigo" },
       { header: "Descrição", dataKey: "descricao" },
@@ -106,8 +168,10 @@ const RDO_default = ({
 
   if (isFinal) {
     // Obra Final
+    var finalY = doc.lastAutoTable.finalY || 10;
     doc.setFontSize(12);
     autoTable(doc, {
+      startY: finalY + 25,
       body: [
         [
           {
