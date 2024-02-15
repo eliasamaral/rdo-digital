@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import locale from "antd/es/date-picker/locale/pt_BR";
+import { gerarPDF } from "./services/gerarPDF";
 
-import RDO_default from "./PDFtemplates/RDO_default";
+
 
 import servicesPCB from "./servicesPCB";
 
@@ -192,11 +193,6 @@ const PCB = () => {
 
   const onChangeRadioButton = (e) => {
     setIsFinal(e.target.value);
-  };
-  const gerarPDF = (data) => {
-    RDO_default(data);
-
-    console.log("PDF Sucesses", data);
   };
 
 

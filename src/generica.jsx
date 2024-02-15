@@ -3,11 +3,12 @@ import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import locale from "antd/es/date-picker/locale/pt_BR";
 import { useNavigate } from "react-router-dom";
+import { gerarPDF } from "./services/gerarPDF";
+
 
 import { useQuery } from "@apollo/client";
 import { CODIGO_BY_TYPE } from "./Schemas";
 
-import RDO_default from "./PDFtemplates/RDO_default";
 
 import {
   Input,
@@ -214,11 +215,6 @@ const Generica = () => {
 
   const onChangeRadioButton = (e) => {
     setIsFinal(e.target.value);
-  };
-  const gerarPDF = (data) => {
-    RDO_default(data);
-
-    console.log("PDF Sucesses", data);
   };
 
   return (

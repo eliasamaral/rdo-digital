@@ -24,7 +24,6 @@ export const GET_PROJETO = gql`
       srv {
         codigo
         descricao
-        qntOrcada
       }
     }
   }
