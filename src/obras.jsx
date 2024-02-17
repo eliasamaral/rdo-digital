@@ -29,9 +29,8 @@ const Obras = () => {
 
   const { getProjetos } = data;
 
-
   function iniciarRota(lat, long) {
-    if(!lat && !long) return
+    if (!lat && !long) return;
     const url = `https://www.google.com/maps?q=${lat},${long}`;
     window.open(url, "_blank");
   }
@@ -74,7 +73,6 @@ const Obras = () => {
         />
       </div>
       {getProjetos.map((obra) => (
-
         <Card
           size="small"
           key={obra.id}
@@ -83,7 +81,7 @@ const Obras = () => {
             <div>
               <Button
                 type="link"
-                onClick={() =>  iniciarRota(obra.coord.x, obra.coord.y)}
+                onClick={() => iniciarRota(obra.coord.x, obra.coord.y)}
               >
                 <EnvironmentFilled />
               </Button>
