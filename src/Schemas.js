@@ -51,6 +51,7 @@ export const CREATE_RDO = gql`
     $observacoes: String
     $isFinal: Boolean
     $servicos: [SRVInput]
+    $fichaTrafo: FichaTrafoInput
   ) {
     createRDO(
       data: {
@@ -64,6 +65,7 @@ export const CREATE_RDO = gql`
         observacoes: $observacoes
         isFinal: $isFinal
         servicos: $servicos
+        fichaTrafo: $fichaTrafo
       }
     ) {
       _id

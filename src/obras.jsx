@@ -55,15 +55,6 @@ const Obras = () => {
       >
         <Card
           size="small"
-          key={"PCB"}
-          title={"PCB"}
-          extra={<Link to={`/pcb`}>Gerar RDO</Link>}
-          style={{
-            width: "100%",
-          }}
-        />
-        <Card
-          size="small"
           key={"generica"}
           title={"Genérica"}
           extra={<Link to={`/generica`}>Gerar RDO</Link>}

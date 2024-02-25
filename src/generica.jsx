@@ -3,19 +3,14 @@ import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import locale from "antd/es/date-picker/locale/pt_BR";
 import { useNavigate } from "react-router-dom";
+import { createRDOHook } from "./services/hook";
+
 import { gerarPDF } from "./services/gerarPDF";
-
-
-import { useQuery } from "@apollo/client";
-import { CODIGO_BY_TYPE } from "./Schemas";
-
 
 import {
   Input,
   Space,
   Divider,
-  List,
-  InputNumber,
   Button,
   Typography,
   DatePicker,
@@ -28,9 +23,8 @@ const { TextArea } = Input;
 const { Title, Text } = Typography;
 
 const Generica = () => {
-  const { data, loading } = useQuery(CODIGO_BY_TYPE, {
-    variables: { tipo: "SRV" },
-  });
+  const { createRDOData, createRDOLoading, createRDOError, submit } =
+    createRDOHook();
 
   const navigate = useNavigate();
 
@@ -64,11 +58,9 @@ const Generica = () => {
   });
 
   const [observacoes, setObservacoes] = useState("Não a observações.");
-  const [servicos, setServicos] = useState([]);
-  const [quantidadesServicos, setQuantidadesServicos] = useState({});
   const [isFinal, setIsFinal] = useState();
 
-  if (loading) {
+  if (createRDOLoading) {
     return (
       <div
         style={{
@@ -83,19 +75,21 @@ const Generica = () => {
     );
   }
 
-  const { codigoByType } = data;
+  if (createRDOData) {
+    navigate("/");
+  }
 
-  const servicosObra = codigoByType.map((item) => ({ ...item }));
+  if (createRDOError) return `Submission error! ${createRDOError.message}`;
 
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
 
     switch (name) {
       case "projeto":
-        setProjeto(value);
+        setProjeto(parseFloat(value));
         break;
       case "diagrama":
-        setDiagrama(value);
+        setDiagrama(parseFloat(value));
         break;
       case "local":
         setLocal(value);
@@ -157,27 +151,7 @@ const Generica = () => {
       case "dataDaProducao":
         setdataDaProducao(value);
         break;
-      case "servicos":
-        const updatedQuantidadesServicos = { ...quantidadesServicos };
-        if (value === null || value === "") {
-          delete updatedQuantidadesServicos[index];
-        } else {
-          updatedQuantidadesServicos[index] = value;
-        }
 
-        const elementosComQuantidade = servicosObra
-          .map((item, index) => {
-            if (index in updatedQuantidadesServicos) {
-              return { ...item, quantidade: updatedQuantidadesServicos[index] };
-            }
-            return null;
-          })
-          .filter(Boolean);
-
-        setServicos(elementosComQuantidade);
-        setQuantidadesServicos(updatedQuantidadesServicos);
-
-        break;
       default:
         break;
     }
@@ -199,13 +173,13 @@ const Generica = () => {
       observacoes,
       maoDeObra,
       clima,
-      servicos,
       dataDaProducao,
       isFinal,
       fichaTrafo,
     };
+
+    submit(data);
     gerarPDF(data);
-    navigate("/");
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -539,29 +513,6 @@ const Generica = () => {
         rows={4}
         name="observacoes"
         onChange={(e) => handleInputChange(e)}
-      />
-
-      <Divider orientation="left">Serviços executados</Divider>
-      <List
-        itemLayout="horizontal"
-        dataSource={codigoByType}
-        renderItem={(item, index) => (
-          <List.Item>
-            <List.Item.Meta title={item.descricao} description={item.codigo} />
-            <InputNumber
-              controls={false}
-              step="0.000"
-              type="number"
-              name="servicos"
-              onChange={(value) =>
-                handleInputChange(
-                  { target: { name: "servicos", value } },
-                  index
-                )
-              }
-            />
-          </List.Item>
-        )}
       />
 
       <Space style={{ marginBlock: "10px" }}>

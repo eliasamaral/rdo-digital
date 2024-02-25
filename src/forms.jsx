@@ -65,22 +65,21 @@ const Forms = () => {
     BC: "",
   });
 
-  
   if (projetoLoading || createRDOLoading) {
     return (
       <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
+        style={{
+          display: "flex",
+          justifyContent: "center",
           height: "100vh",
           alignItems: "center",
         }}
-        >
+      >
         <Spin />
       </div>
     );
   }
-  
+
   if (createRDOData) {
     navigate("/");
   }
@@ -199,9 +198,8 @@ const Forms = () => {
       isFinal,
       fichaTrafo,
     };
-    gerarPDF(data);
-    if (!isFinal) return;
     submit(data);
+    gerarPDF(data);
   };
 
   const onFinishFailed = (errorInfo) => {
