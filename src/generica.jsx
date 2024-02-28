@@ -75,10 +75,6 @@ const Generica = () => {
     );
   }
 
-  if (createRDOData) {
-    navigate("/");
-  }
-
   if (createRDOError) return `Submission error! ${createRDOError.message}`;
 
   const handleInputChange = (e, index) => {
@@ -180,6 +176,9 @@ const Generica = () => {
 
     submit(data);
     gerarPDF(data);
+    if (createRDOData) {
+      navigate("/");
+    }
   };
 
   const onFinishFailed = (errorInfo) => {

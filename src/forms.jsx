@@ -80,9 +80,7 @@ const Forms = () => {
     );
   }
 
-  if (createRDOData) {
-    navigate("/");
-  }
+
   if (projetoError || createRDOError)
     return `Submission error! ${projetoError.message}, ${createRDOError.message}`;
 
@@ -200,6 +198,9 @@ const Forms = () => {
     };
     submit(data);
     gerarPDF(data);
+    if (createRDOData) {
+      navigate("/");
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
