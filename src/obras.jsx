@@ -29,6 +29,11 @@ const Obras = () => {
 
   const { getProjetos } = data;
 
+  const objetosComStatusUm = getProjetos.filter(
+    (objeto) => objeto.status === 1
+  );
+
+
   function iniciarRota(lat, long) {
     if (!lat && !long) return;
     const url = `https://www.google.com/maps?q=${lat},${long}`;
@@ -63,7 +68,7 @@ const Obras = () => {
           }}
         />
       </div>
-      {getProjetos.map((obra) => (
+      {objetosComStatusUm.map((obra) => (
         <Card
           size="small"
           key={obra.id}

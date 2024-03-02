@@ -6,6 +6,7 @@ export const GET_PROJETOS = gql`
       id
       projeto
       local
+      status
       coord{
         x
         y
