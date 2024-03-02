@@ -200,7 +200,7 @@ const Forms = () => {
     submit(data);
     if (isFinal) updateStatusSubmit(id);
 
-    // gerarPDF(data);
+    gerarPDF(data);
     if (createRDOData) navigate("/");
   };
 
