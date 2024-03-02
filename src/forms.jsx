@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getProjetoHook, createRDOHook } from "./services/hook";
+import { getProjetoHook, createRDOHook, updateStatus } from "./services/hook";
 import { gerarPDF } from "./services/gerarPDF";
 
 import dayjs from "dayjs";
@@ -26,13 +26,15 @@ const { Title, Text } = Typography;
 
 const Forms = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id: projetoParams } = useParams();
 
   const { projetoData, projetoLoading, projetoError } = getProjetoHook(
-    parseFloat(id)
+    parseFloat(projetoParams)
   );
   const { createRDOData, createRDOLoading, createRDOError, submit } =
     createRDOHook();
+
+  const { updateStatusSubmit, updateStatusLoading } = updateStatus();
 
   const [encarregado, setEncarregado] = useState("");
   const [dataDaProducao, setdataDaProducao] = useState("");
@@ -65,7 +67,7 @@ const Forms = () => {
     BC: "",
   });
 
-  if (projetoLoading || createRDOLoading) {
+  if (projetoLoading || createRDOLoading || updateStatusLoading) {
     return (
       <div
         style={{
@@ -80,11 +82,10 @@ const Forms = () => {
     );
   }
 
-
   if (projetoError || createRDOError)
     return `Submission error! ${projetoError.message}, ${createRDOError.message}`;
 
-  const { projeto, diagrama, local, srv } = projetoData.getProjeto;
+  const { projeto, diagrama, local, srv, id } = projetoData.getProjeto;
 
   const servicosObra = srv.map((item) => ({ ...item }));
 
@@ -197,10 +198,10 @@ const Forms = () => {
       fichaTrafo,
     };
     submit(data);
-    gerarPDF(data);
-    if (createRDOData) {
-      navigate("/");
-    }
+    if (isFinal) updateStatusSubmit(id);
+
+    // gerarPDF(data);
+    if (createRDOData) navigate("/");
   };
 
   const onFinishFailed = (errorInfo) => {

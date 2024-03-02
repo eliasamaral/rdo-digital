@@ -7,7 +7,7 @@ export const GET_PROJETOS = gql`
       projeto
       local
       status
-      coord{
+      coord {
         x
         y
       }
@@ -70,7 +70,14 @@ export const CREATE_RDO = gql`
       }
     ) {
       _id
-      
+    }
+  }
+`;
+
+export const UPDATE_STATUS = gql`
+  mutation ($id: ID!, $status: Float) {
+    updateStatus(id: $id, status: $status) {
+      status
     }
   }
 `;
