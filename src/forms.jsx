@@ -167,7 +167,12 @@ const Forms = () => {
           })
           .filter(Boolean);
 
-        setServicos(elementosComQuantidade);
+        let removeTypename = elementosComQuantidade.map((s) => {
+          const { __typename, ...rest } = s;
+          return rest;
+        });
+
+        setServicos(removeTypename);
         setQuantidadesServicos(updatedQuantidadesServicos);
 
         break;
@@ -197,11 +202,12 @@ const Forms = () => {
       isFinal,
       fichaTrafo,
     };
+
     submit(data);
     if (isFinal) updateStatusSubmit(id);
+    if (createRDOData) navigate("/");
 
     gerarPDF(data);
-    if (createRDOData) navigate("/");
   };
 
   const onFinishFailed = (errorInfo) => {
