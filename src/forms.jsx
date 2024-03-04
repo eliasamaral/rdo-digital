@@ -103,16 +103,16 @@ const Forms = () => {
         setClima({ ...clima, tarde: value });
         break;
       case "encarregadoQuantidade":
-        setMaoDeObra({ ...maoDeObra, encarregado: value });
+        setMaoDeObra({ ...maoDeObra, encarregado: parseFloat(value) });
         break;
       case "motoristaQuantidade":
-        setMaoDeObra({ ...maoDeObra, motorista: value });
+        setMaoDeObra({ ...maoDeObra, motorista: parseFloat(value) });
         break;
       case "eletricistaQuantidade":
-        setMaoDeObra({ ...maoDeObra, eletricista: value });
+        setMaoDeObra({ ...maoDeObra, eletricista: parseFloat(value) });
         break;
       case "auxiliarQuantidade":
-        setMaoDeObra({ ...maoDeObra, auxiliar: value });
+        setMaoDeObra({ ...maoDeObra, auxiliar: parseFloat(value) });
         break;
       case "estf":
         setFichaTrafo({ ...fichaTrafo, estf: value });
