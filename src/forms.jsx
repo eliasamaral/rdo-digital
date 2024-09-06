@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { getProjetoHook, createRDOHook, updateStatus } from "./services/hook";
+import { gerarPDF } from "./services/gerarPDF";
+
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import locale from "antd/es/date-picker/locale/pt_BR";
-
-import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_RDO, GET_PROJETO } from "./Schemas";
-
-import RDO_default from "./PDFtemplates/RDO_default";
 
 import {
   Input,
@@ -27,14 +25,16 @@ const { TextArea } = Input;
 const { Title, Text } = Typography;
 
 const Forms = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
+  const { id: projetoParams } = useParams();
 
-  const { data, loading, error } = useQuery(GET_PROJETO, {
-    variables: { projeto: parseFloat(id) },
-  });
+  const { projetoData, projetoLoading, projetoError } = getProjetoHook(
+    parseFloat(projetoParams)
+  );
+  const { createRDOData, createRDOLoading, createRDOError, submit } =
+    createRDOHook();
 
-  const [createRDO, { data: createRDOdata }] = useMutation(CREATE_RDO);
+  const { updateStatusSubmit, updateStatusLoading } = updateStatus();
 
   const [encarregado, setEncarregado] = useState("");
   const [dataDaProducao, setdataDaProducao] = useState("");
@@ -67,12 +67,7 @@ const Forms = () => {
     BC: "",
   });
 
-  if (createRDOdata) {
-    console.log("Success", createRDOdata);
-    navigate("/");
-  }
-
-  if (loading) {
+  if (projetoLoading || createRDOLoading || updateStatusLoading) {
     return (
       <div
         style={{
@@ -87,9 +82,10 @@ const Forms = () => {
     );
   }
 
-  if (error) return `Submission error! ${error.message}`;
+  if (projetoError || createRDOError)
+    return `Submission error! ${projetoError.message}, ${createRDOError.message}`;
 
-  const { projeto, diagrama, local, srv } = data.getProjeto;
+  const { projeto, diagrama, local, srv, id } = projetoData.getProjeto;
 
   const servicosObra = srv.map((item) => ({ ...item }));
 
@@ -107,16 +103,16 @@ const Forms = () => {
         setClima({ ...clima, tarde: value });
         break;
       case "encarregadoQuantidade":
-        setMaoDeObra({ ...maoDeObra, encarregado: value });
+        setMaoDeObra({ ...maoDeObra, encarregado: parseFloat(value) });
         break;
       case "motoristaQuantidade":
-        setMaoDeObra({ ...maoDeObra, motorista: value });
+        setMaoDeObra({ ...maoDeObra, motorista: parseFloat(value) });
         break;
       case "eletricistaQuantidade":
-        setMaoDeObra({ ...maoDeObra, eletricista: value });
+        setMaoDeObra({ ...maoDeObra, eletricista: parseFloat(value) });
         break;
       case "auxiliarQuantidade":
-        setMaoDeObra({ ...maoDeObra, auxiliar: value });
+        setMaoDeObra({ ...maoDeObra, auxiliar: parseFloat(value) });
         break;
       case "estf":
         setFichaTrafo({ ...fichaTrafo, estf: value });
@@ -171,7 +167,12 @@ const Forms = () => {
           })
           .filter(Boolean);
 
-        setServicos(elementosComQuantidade);
+        let removeTypename = elementosComQuantidade.map((s) => {
+          const { __typename, ...rest } = s;
+          return rest;
+        });
+
+        setServicos(removeTypename);
         setQuantidadesServicos(updatedQuantidadesServicos);
 
         break;
@@ -201,9 +202,11 @@ const Forms = () => {
       isFinal,
       fichaTrafo,
     };
-    createRDO({
-      variables: data,
-    });
+
+    submit(data);
+    if (isFinal) updateStatusSubmit(id);
+    if (createRDOData) navigate("/");
+
     gerarPDF(data);
   };
 
@@ -214,11 +217,6 @@ const Forms = () => {
 
   const onChangeRadioButton = (e) => {
     setIsFinal(e.target.value);
-  };
-  const gerarPDF = (data) => {
-    RDO_default(data);
-
-    console.log("PDF Sucesses", data);
   };
 
   return (

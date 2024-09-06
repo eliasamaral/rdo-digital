@@ -29,9 +29,13 @@ const Obras = () => {
 
   const { getProjetos } = data;
 
+  const objetosComStatusUm = getProjetos.filter(
+    (objeto) => objeto.status === 1
+  );
+
 
   function iniciarRota(lat, long) {
-    if(!lat && !long) return
+    if (!lat && !long) return;
     const url = `https://www.google.com/maps?q=${lat},${long}`;
     window.open(url, "_blank");
   }
@@ -56,15 +60,6 @@ const Obras = () => {
       >
         <Card
           size="small"
-          key={"PCB"}
-          title={"PCB"}
-          extra={<Link to={`/pcb`}>Gerar RDO</Link>}
-          style={{
-            width: "100%",
-          }}
-        />
-        <Card
-          size="small"
           key={"generica"}
           title={"Genérica"}
           extra={<Link to={`/generica`}>Gerar RDO</Link>}
@@ -73,8 +68,7 @@ const Obras = () => {
           }}
         />
       </div>
-      {getProjetos.map((obra) => (
-
+      {objetosComStatusUm.map((obra) => (
         <Card
           size="small"
           key={obra.id}
@@ -83,7 +77,7 @@ const Obras = () => {
             <div>
               <Button
                 type="link"
-                onClick={() =>  iniciarRota(obra.coord.x, obra.coord.y)}
+                onClick={() => iniciarRota(obra.coord.x, obra.coord.y)}
               >
                 <EnvironmentFilled />
               </Button>

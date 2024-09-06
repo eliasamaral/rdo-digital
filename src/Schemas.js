@@ -6,7 +6,8 @@ export const GET_PROJETOS = gql`
       id
       projeto
       local
-      coord{
+      status
+      coord {
         x
         y
       }
@@ -24,7 +25,6 @@ export const GET_PROJETO = gql`
       srv {
         codigo
         descricao
-        qntOrcada
       }
     }
   }
@@ -52,6 +52,7 @@ export const CREATE_RDO = gql`
     $observacoes: String
     $isFinal: Boolean
     $servicos: [SRVInput]
+    $fichaTrafo: FichaTrafoInput
   ) {
     createRDO(
       data: {
@@ -65,10 +66,18 @@ export const CREATE_RDO = gql`
         observacoes: $observacoes
         isFinal: $isFinal
         servicos: $servicos
+        fichaTrafo: $fichaTrafo
       }
     ) {
       _id
-      
+    }
+  }
+`;
+
+export const UPDATE_STATUS = gql`
+  mutation ($id: ID!, $status: Float) {
+    updateStatus(id: $id, status: $status) {
+      status
     }
   }
 `;
