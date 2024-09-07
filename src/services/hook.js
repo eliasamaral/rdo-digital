@@ -1,5 +1,5 @@
-import { useQuery, useMutation } from "@apollo/client";
-import { GET_PROJETO, CREATE_RDO, UPDATE_STATUS } from "../Schemas";
+import { useQuery, useMutation } from '@apollo/client'
+import { GET_PROJETO, CREATE_RDO, UPDATE_STATUS } from '../Schemas'
 
 /**
  * Função que retorna um hook para criar um relatório diário de obra.
@@ -7,14 +7,14 @@ import { GET_PROJETO, CREATE_RDO, UPDATE_STATUS } from "../Schemas";
  * @returns {Object} Um objeto contendo dados, estado de carregamento e possíveis erros.
  */
 export function createRDOHook(reportData) {
-  const [
-    createRDO,
-    { data: createRDOData, loading: createRDOLoading, error: createRDOError },
-  ] = useMutation(CREATE_RDO);
+	const [
+		createRDO,
+		{ data: createRDOData, loading: createRDOLoading, error: createRDOError },
+	] = useMutation(CREATE_RDO)
 
-  const submit = (props) => createRDO({ variables: props });
+	const submit = (props) => createRDO({ variables: props })
 
-  return { createRDOData, createRDOLoading, createRDOError, submit };
+	return { createRDOData, createRDOLoading, createRDOError, submit }
 }
 
 /**
@@ -23,15 +23,15 @@ export function createRDOHook(reportData) {
  * @returns {Object} Um objeto contendo dados, estado de carregamento e possíveis erros.
  */
 export function getProjetoHook(projetoParams) {
-  const {
-    data: projetoData,
-    loading: projetoLoading,
-    error: projetoError,
-  } = useQuery(GET_PROJETO, {
-    variables: { projeto: projetoParams },
-  });
+	const {
+		data: projetoData,
+		loading: projetoLoading,
+		error: projetoError,
+	} = useQuery(GET_PROJETO, {
+		variables: { projeto: projetoParams },
+	})
 
-  return { projetoData, projetoLoading, projetoError };
+	return { projetoData, projetoLoading, projetoError }
 }
 
 /**
@@ -40,22 +40,22 @@ export function getProjetoHook(projetoParams) {
  * @returns {Object} Um objeto contendo dados, estado de carregamento e possíveis erros.
  */
 export function updateStatus() {
-  const [
-    updateStatus,
-    {
-      data: updateStatusData,
-      loading: updateStatusLoading,
-      error: updateStatusError,
-    },
-  ] = useMutation(UPDATE_STATUS);
+	const [
+		updateStatus,
+		{
+			data: updateStatusData,
+			loading: updateStatusLoading,
+			error: updateStatusError,
+		},
+	] = useMutation(UPDATE_STATUS)
 
-  const updateStatusSubmit = (props) =>
-    updateStatus({ variables: { id: props, status: 2 } });
+	const updateStatusSubmit = (props) =>
+		updateStatus({ variables: { id: props, status: 2 } })
 
-  return {
-    updateStatusData,
-    updateStatusLoading,
-    updateStatusError,
-    updateStatusSubmit,
-  };
+	return {
+		updateStatusData,
+		updateStatusLoading,
+		updateStatusError,
+		updateStatusSubmit,
+	}
 }

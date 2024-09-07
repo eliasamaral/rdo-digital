@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const GET_PROJETOS = gql`
   query {
@@ -13,7 +13,7 @@ export const GET_PROJETOS = gql`
       }
     }
   }
-`;
+`
 
 export const GET_PROJETO = gql`
   query ($projeto: Float!) {
@@ -28,7 +28,7 @@ export const GET_PROJETO = gql`
       }
     }
   }
-`;
+`
 
 export const CODIGO_BY_TYPE = gql`
   query ($tipo: String!) {
@@ -38,7 +38,7 @@ export const CODIGO_BY_TYPE = gql`
       codigo
     }
   }
-`;
+`
 
 export const CREATE_RDO = gql`
   mutation (
@@ -72,7 +72,7 @@ export const CREATE_RDO = gql`
       _id
     }
   }
-`;
+`
 
 export const UPDATE_STATUS = gql`
   mutation ($id: ID!, $status: Float) {
@@ -80,4 +80,4 @@ export const UPDATE_STATUS = gql`
       status
     }
   }
-`;
+`
