@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom/client'
 import Forms from './forms.jsx'
 import Obras from './obras.jsx'
 import Generica from './generica'
+import MteForms from './mteForms.jsx'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
 
 	{
 		path: '/generica',
-		element: <Generica />,
+		element: <MteForms />,
 	},
 	{
 		path: 'forms/:id',

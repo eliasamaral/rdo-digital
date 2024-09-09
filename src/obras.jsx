@@ -59,7 +59,7 @@ const Obras = () => {
 					size="small"
 					key={'generica'}
 					title={'Genérica'}
-					extra={<Link to={`/generica`}>Gerar RDO</Link>}
+					extra={<Link to={'/generica'}>Gerar RDO</Link>}
 					style={{
 						width: '100%',
 					}}
