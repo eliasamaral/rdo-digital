@@ -37,17 +37,13 @@ const Generica = () => {
 		tarde: 'Bom',
 	})
 
-	const [atividades, setAtividades] = useState([
-		{ atividade: '', inicio: '', fim: '' },
-	])
+	const [atividades, setAtividades] = useState([{ atividade: '', duracao: '' }])
 
 	const [maoDeObra, setMaoDeObra] = useState([
 		{ nome: '', funcao: '', inicio: '', fim: '' },
 	])
 
 	const [observacoes, setObservacoes] = useState('Não a observações.')
-	const [isFinal, setIsFinal] = useState()
-
 	if (createRDOLoading) {
 		return (
 			<div
@@ -70,7 +66,7 @@ const Generica = () => {
 
 		switch (name) {
 			case 'projeto':
-				setProjeto(Number.parseFloat(value))
+				setProjeto(value)
 				break
 			case 'local':
 				setLocal(value)
@@ -115,8 +111,6 @@ const Generica = () => {
 		const updatedMaoDeObra = [...maoDeObra]
 		updatedMaoDeObra[index][name] = value
 		setMaoDeObra(updatedMaoDeObra)
-
-		console.log(maoDeObra)
 	}
 
 	const handleAtividadeChange = (e, index) => {
@@ -124,8 +118,6 @@ const Generica = () => {
 		const updatedAtividade = [...atividades]
 		updatedAtividade[index][name] = value
 		setAtividades(updatedAtividade)
-
-		console.log(atividades)
 	}
 
 	const onFinish = () => {
@@ -137,14 +129,15 @@ const Generica = () => {
 			observacoes,
 			clima,
 			dataDaProducao,
-			isFinal,
+			atividades,
+			maoDeObra,
 		}
 
-		// submit(data)
+		submit(data)
 		// gerarPDF(data)
-		// if (createRDOData) {
-		// 	navigate('/')
-		// }
+		if (createRDOData) {
+			navigate('/')
+		}
 	}
 
 	const onFinishFailed = (errorInfo) => {

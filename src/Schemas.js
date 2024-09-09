@@ -42,31 +42,25 @@ export const CODIGO_BY_TYPE = gql`
 
 export const CREATE_RDO = gql`
   mutation (
-    $projeto: Float
-    $diagrama: Float
+    $projeto: String
     $encarregado: String
     $local: String
     $dataDaProducao: String
     $clima: ClimaInput
-    $maoDeObra: maoDeObraInput
+    $maoDeObra: [MaoDeObraInput]
     $observacoes: String
-    $isFinal: Boolean
-    $servicos: [SRVInput]
-    $fichaTrafo: FichaTrafoInput
+    $atividades: [AtividadeInput]
   ) {
     createRDO(
       data: {
         projeto: $projeto
-        diagrama: $diagrama
         encarregado: $encarregado
         local: $local
         dataDaProducao: $dataDaProducao
         clima: $clima
         maoDeObra: $maoDeObra
         observacoes: $observacoes
-        isFinal: $isFinal
-        servicos: $servicos
-        fichaTrafo: $fichaTrafo
+        atividades: $atividades
       }
     ) {
       _id
