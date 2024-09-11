@@ -133,11 +133,11 @@ const Generica = () => {
       maoDeObra,
     }
 
-    submit(data)
+     submit(data)
     // gerarPDF(data)
-    if (createRDOData) {
-      navigate('/')
-    }
+     if (createRDOData) {
+        navigate('/')
+     }
   }
 
   const onFinishFailed = errorInfo => {
@@ -189,17 +189,13 @@ const Generica = () => {
           name="projeto"
           rules={[
             {
-              required: true,
+              required: false,
               message: 'Obrigatorio!',
             },
           ]}
           style={{ margin: '0px' }}
         >
-          <Input
-            name="projeto"
-            value={projeto}
-            onChange={e => handleInputChange(e)}
-          />
+          <Input name="projeto" onChange={e => handleInputChange(e)} />
         </Form.Item>
       </Space>
 
@@ -217,7 +213,7 @@ const Generica = () => {
           name="local"
           rules={[
             {
-              required: true,
+              required: false,
               message: 'Obrigatorio!',
             },
           ]}
@@ -237,7 +233,7 @@ const Generica = () => {
           name="encarregado"
           rules={[
             {
-              required: true,
+              required: false,
               message: 'Obrigatorio!',
             },
           ]}
@@ -257,7 +253,7 @@ const Generica = () => {
           name="data"
           rules={[
             {
-              required: true,
+              required: false,
               message: 'Obrigatorio!',
             },
           ]}
@@ -392,6 +388,15 @@ const Generica = () => {
               type="time"
               name="duracao"
               value={item.duracao}
+              onChange={e => handleAtividadeChange(e, index)}
+            />
+          </Space>
+          <Space direction="vertical">
+            <Text style={{ margin: '0px', fontSize: '13px' }}>Executante</Text>
+            <Input
+              type="text"
+              name="executante"
+              value={item.executante}
               onChange={e => handleAtividadeChange(e, index)}
             />
           </Space>
