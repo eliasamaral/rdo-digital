@@ -168,7 +168,7 @@ const Generica = () => {
         </Title>
 
         <Button type="primary" htmlType="submit">
-          Gerar PDF
+          Enviar
         </Button>
       </Space>
 
@@ -420,7 +420,7 @@ const Generica = () => {
 
       <Space style={{ marginBlock: '10px' }}>
         <Button type="primary" htmlType="submit">
-          Gerar PDF
+          Enviar
         </Button>
       </Space>
     </Form>
