@@ -18,7 +18,6 @@ import {
   Spin,
   Typography,
 } from 'antd'
-import { execute } from 'graphql'
 
 const { TextArea } = Input
 const { Title, Text } = Typography
@@ -38,7 +37,7 @@ const Generica = () => {
     tarde: 'Bom',
   })
 
-  const [atividades, setAtividades] = useState([{ atividade: '', duracao: '', execucao: '' }])
+  const [atividades, setAtividades] = useState([{ atividade: '', duracao: '', executante: '' }])
 
   const [maoDeObra, setMaoDeObra] = useState([
     { nome: '', funcao: '', inicio: '', fim: '' },
