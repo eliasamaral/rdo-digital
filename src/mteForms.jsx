@@ -5,15 +5,12 @@ import locale from 'antd/es/date-picker/locale/pt_BR'
 import { useNavigate } from 'react-router-dom'
 import { createRDOHook } from './services/hook'
 
-import { gerarPDF } from './services/gerarPDF'
-
 import {
   Button,
   DatePicker,
   Divider,
   Form,
   Input,
-  Radio,
   Space,
   Spin,
   Typography,
@@ -134,7 +131,6 @@ const Generica = () => {
     }
 
      submit(data)
-    // gerarPDF(data)
      if (createRDOData) {
         navigate('/')
      }
