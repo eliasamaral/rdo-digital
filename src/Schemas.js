@@ -15,6 +15,17 @@ export const GET_PROJETOS = gql`
   }
 `
 
+export const GET_RDOS = gql`
+  query {
+    getRDOS {
+      _id
+      encarregado
+      dataDaProducao
+      createdAt
+    }
+  }
+`
+
 export const GET_PROJETO = gql`
   query ($projeto: Float!) {
     getProjeto(projeto: $projeto) {
