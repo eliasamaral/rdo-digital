@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { gerarPDF } from './services/gerarPDF'
 import { createRDOHook, getProjetoHook, updateStatus } from './services/hook'
 
 import dayjs from 'dayjs'
@@ -208,7 +207,6 @@ const Forms = () => {
     if (isFinal) updateStatusSubmit(id)
     if (createRDOData) navigate('/')
 
-    gerarPDF(data)
   }
 
   const onFinishFailed = errorInfo => {
