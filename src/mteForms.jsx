@@ -5,22 +5,40 @@ import locale from 'antd/es/date-picker/locale/pt_BR'
 import { useNavigate } from 'react-router-dom'
 import { createRDOHook } from './services/hook'
 
-import { gerarPDF } from './services/gerarPDF'
-
 import {
   Button,
   DatePicker,
   Divider,
   Form,
   Input,
-  Radio,
   Space,
   Spin,
   Typography,
+  Upload,
+  message,
 } from 'antd'
+import { PictureOutlined } from '@ant-design/icons'
 
 const { TextArea } = Input
 const { Title, Text } = Typography
+
+const props = {
+  name: 'file',
+  action: 'https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload',
+  headers: {
+    authorization: 'authorization-text',
+  },
+  onChange(info) {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList)
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`)
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`)
+    }
+  },
+}
 
 const Generica = () => {
   const { createRDOData, createRDOLoading, createRDOError, submit } =
@@ -37,7 +55,9 @@ const Generica = () => {
     tarde: 'Bom',
   })
 
-  const [atividades, setAtividades] = useState([{ atividade: '', duracao: '', executante: '' }])
+  const [atividades, setAtividades] = useState([
+    { atividade: '', duracao: '', executante: '' },
+  ])
 
   const [maoDeObra, setMaoDeObra] = useState([
     { nome: '', funcao: '', inicio: '', fim: '' },
@@ -133,11 +153,10 @@ const Generica = () => {
       maoDeObra,
     }
 
-     submit(data)
-    // gerarPDF(data)
-     if (createRDOData) {
-        navigate('/')
-     }
+    submit(data)
+    if (createRDOData) {
+      navigate('/')
+    }
   }
 
   const onFinishFailed = errorInfo => {
@@ -382,15 +401,7 @@ const Generica = () => {
               onChange={e => handleAtividadeChange(e, index)}
             />
           </Space>
-          <Space direction="vertical">
-            <Text style={{ margin: '0px', fontSize: '13px' }}>Duração</Text>
-            <Input
-              type="time"
-              name="duracao"
-              value={item.duracao}
-              onChange={e => handleAtividadeChange(e, index)}
-            />
-          </Space>
+
           <Space direction="vertical">
             <Text style={{ margin: '0px', fontSize: '13px' }}>Executante</Text>
             <Input
@@ -400,6 +411,21 @@ const Generica = () => {
               onChange={e => handleAtividadeChange(e, index)}
             />
           </Space>
+          <Space direction="vertical">
+            <Text style={{ margin: '0px', fontSize: '13px' }}>Duração</Text>
+            <Input
+              type="time"
+              name="duracao"
+              value={item.duracao}
+              onChange={e => handleAtividadeChange(e, index)}
+            />
+          </Space>
+
+          {/* <Space style={{alignItems: "end", marginBottom: "4px"}}>
+            <Upload {...props}>
+              <Button icon={<PictureOutlined />}/>
+            </Upload>
+          </Space> */}
         </div>
       ))}
 
