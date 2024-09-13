@@ -154,7 +154,8 @@ const Generica = () => {
     }
 
     submit(data)
-    if (createRDOData) {
+
+    if (!createRDOLoading || !createRDOError) {
       navigate('/')
     }
   }

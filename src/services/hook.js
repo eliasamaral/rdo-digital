@@ -1,11 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { CREATE_RDO, GET_PROJETO, UPDATE_STATUS } from '../Schemas'
 
-/**
- * Função que retorna um hook para criar um relatório diário de obra.
- * @param {Object} reportData - Dados para serem gravados.
- * @returns {Object} Um objeto contendo dados, estado de carregamento e possíveis erros.
- */
 export function createRDOHook(reportData) {
   const [
     createRDO,
@@ -17,11 +12,6 @@ export function createRDOHook(reportData) {
   return { createRDOData, createRDOLoading, createRDOError, submit }
 }
 
-/**
- * Função que retorna um hook para buscar um projeto.
- * @param {number} projetoParams - O ID do projeto a ser buscado.
- * @returns {Object} Um objeto contendo dados, estado de carregamento e possíveis erros.
- */
 export function getProjetoHook(projetoParams) {
   const {
     data: projetoData,
@@ -34,11 +24,6 @@ export function getProjetoHook(projetoParams) {
   return { projetoData, projetoLoading, projetoError }
 }
 
-/**
- * Função que retorna um hook para atualizar um projeto.
- * @param {id} props - O ID do projeto a ser atualizado.
- * @returns {Object} Um objeto contendo dados, estado de carregamento e possíveis erros.
- */
 export function updateStatus() {
   const [
     updateStatus,
