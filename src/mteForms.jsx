@@ -3,7 +3,9 @@ import React, { useState } from 'react'
 import 'dayjs/locale/pt-br'
 import locale from 'antd/es/date-picker/locale/pt_BR'
 import { useNavigate } from 'react-router-dom'
-import { createRDOHook } from './services/hook'
+import { createRDOHook,createActivityHook } from './services/hook'
+
+
 
 import {
   Button,
@@ -43,6 +45,13 @@ const props = {
 const Generica = () => {
   const { createRDOData, createRDOLoading, createRDOError, submit } =
     createRDOHook()
+
+  const {activities, loading} = createActivityHook()
+
+    
+    
+
+    
 
   const navigate = useNavigate()
 

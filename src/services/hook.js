@@ -1,5 +1,10 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { CREATE_RDO, GET_PROJETO, UPDATE_STATUS } from '../Schemas'
+import {
+  CREATE_RDO,
+  GET_PROJETO,
+  UPDATE_STATUS,
+  GET_ACTIVITY,
+} from '../Schemas'
 
 export function createRDOHook(reportData) {
   const [
@@ -43,4 +48,14 @@ export function updateStatus() {
     updateStatusError,
     updateStatusSubmit,
   }
+}
+
+export function createActivityHook() {
+  const {
+    data: { activities } = {},
+    loading,
+    error,
+  } = useQuery(GET_ACTIVITY)
+
+  return {activities, loading, error}
 }

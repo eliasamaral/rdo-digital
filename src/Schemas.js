@@ -86,3 +86,15 @@ export const UPDATE_STATUS = gql`
     }
   }
 `
+
+export const GET_ACTIVITY = gql`
+  query{
+  activities {
+    id
+    nome
+    valor
+    descricao
+  }
+}
+
+`
