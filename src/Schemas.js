@@ -92,7 +92,7 @@ export const GET_ACTIVITY = gql`
   activities {
     _id
     name
-    value
+    price
     description
   }
 }
